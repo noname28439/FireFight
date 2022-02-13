@@ -1,0 +1,11 @@
+name: FireFight2
+version: 1.0
+main: main.Main
+api-version: 1.16
+
+commands:
+   test:
+   spectate:
+   build:
+   spawn:
+   join:
