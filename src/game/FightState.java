@@ -2,20 +2,10 @@ package game;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class FightState extends GameState{
-
-	@Override
-	public void handleJoin(Player joined) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void handleLeave(Player leaved) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void start() {
@@ -25,6 +15,18 @@ public class FightState extends GameState{
 
 	@Override
 	public void stop() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void handleJoin(PlayerJoinEvent e, Player joined) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void handleLeave(PlayerQuitEvent e, Player leaved) {
 		// TODO Auto-generated method stub
 		
 	}
