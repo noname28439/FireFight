@@ -8,19 +8,19 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public abstract class GameState implements Listener{
 
-	public abstract void handleJoin(PlayerJoinEvent e, Player joined);
-	public abstract void handleLeave(PlayerQuitEvent e, Player leaved);
+	public abstract void handleJoin(Player joined);
+	public abstract void handleLeave(Player leaved);
 	
 	public abstract void start();
 	public abstract void stop();
 	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
-		handleJoin(e, e.getPlayer());
+		handleJoin(e.getPlayer());
 	}
 	@EventHandler
 	public void onLeave(PlayerQuitEvent e) {
-		handleLeave(e, e.getPlayer());
+		handleLeave(e.getPlayer());
 	}
 	
 }

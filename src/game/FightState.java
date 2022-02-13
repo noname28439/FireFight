@@ -9,25 +9,21 @@ public class FightState extends GameState{
 
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void stop() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void handleJoin(PlayerJoinEvent e, Player joined) {
-		// TODO Auto-generated method stub
+	public void handleJoin(Player joined) {
 		
 	}
 
 	@Override
-	public void handleLeave(PlayerQuitEvent e, Player leaved) {
-		// TODO Auto-generated method stub
+	public void handleLeave(Player leaved) {
 		
 	}
 

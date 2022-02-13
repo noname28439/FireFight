@@ -18,6 +18,7 @@ import game.LobbyState;
 public class Main extends JavaPlugin{
 	
 	public static JavaPlugin plugin;
+	public static PluginManager pm;
 	
 	public static GameState 
 						LOBBY_STATE = new LobbyState(),
@@ -39,10 +40,8 @@ public class Main extends JavaPlugin{
 		
 		
 		//Adding Listeners
-		PluginManager pm = Bukkit.getPluginManager();
-		pm.registerEvents(LOBBY_STATE, this);
-		pm.registerEvents(BUILD_STATE, this);
-		pm.registerEvents(FIGHT_STATE, this);
+		pm = Bukkit.getPluginManager();
+		
 		
 		main();
 		
