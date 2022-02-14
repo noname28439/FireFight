@@ -4,12 +4,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import bases.BaseManager;
 import commands.BuildCMD;
 import commands.JoinCMD;
 import commands.SpawnCMD;
 import commands.SpectateCMD;
 import commands.TestCMD;
-import game.BuildState;
+import game.FightState;
 import game.FightState;
 import game.GameState;
 import game.GameStateManager;
@@ -23,7 +24,6 @@ public class Main extends JavaPlugin{
 	
 	public static GameState 
 						LOBBY_STATE = new LobbyState(),
-						BUILD_STATE = new BuildState(),
 						FIGHT_STATE = new FightState();
 			
 	
@@ -43,6 +43,7 @@ public class Main extends JavaPlugin{
 		//Adding Listeners
 		pm = Bukkit.getPluginManager();
 		pm.registerEvents(new TeamManager(), this);
+		pm.registerEvents(new BaseManager(), this);
 		
 		main();
 		

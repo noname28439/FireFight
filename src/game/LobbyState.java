@@ -39,7 +39,7 @@ public class LobbyState extends GameState{
 				lobbycountdown = Settings.lobbySeconds;
 			
 			if(lobbycountdown<=0) {
-				GameStateManager.switchGameState(Main.BUILD_STATE);
+				GameStateManager.switchGameState(Main.FIGHT_STATE);
 			}
 			
 			for(Player cp : Bukkit.getOnlinePlayers())
@@ -62,6 +62,7 @@ public class LobbyState extends GameState{
 			joined.setGameMode(GameMode.ADVENTURE);
 		}
 		joined.getInventory().setItem(4, new ItemBuilder(Material.COMPASS, 1).setDisplayname(ChatColor.DARK_BLUE+"TeamSelector").build());
+		joined.getInventory().setItem(2, new ItemBuilder(Material.BRICKS, 1).setDisplayname(ChatColor.GOLD+"BaseManager").build());
 		TeamManager.setPlayerTeam(joined.getName(), null);
 		for (PotionEffect effect : joined.getActivePotionEffects())
 			joined.removePotionEffect(effect.getType());

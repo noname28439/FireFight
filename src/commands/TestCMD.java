@@ -22,7 +22,7 @@ public class TestCMD implements CommandExecutor {
 		}
 		
 		if(GameStateManager.currentGameState==Main.LOBBY_STATE)
-			GameStateManager.switchGameState(Main.BUILD_STATE);
+			GameStateManager.switchGameState(Main.FIGHT_STATE);
 		else
 			p.sendMessage(ChatColor.RED+" only in Lobby available!");
 		

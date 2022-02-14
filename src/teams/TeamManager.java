@@ -104,7 +104,7 @@ public class TeamManager implements Listener{
 	@EventHandler
 	public void onItemInteract(PlayerInteractEvent e) {
 		if((e.getAction()==Action.RIGHT_CLICK_AIR || e.getAction()==Action.RIGHT_CLICK_BLOCK) && GameStateManager.currentGameState == Main.LOBBY_STATE && e.getItem()!=null) 
-			if(e.getItem().getType() == Material.COMPASS) e.getPlayer().openInventory(getSelectionInventory());
+			if(e.getItem().getType() == Material.COMPASS) {e.setCancelled(true); e.getPlayer().openInventory(getSelectionInventory());}
 	}
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
