@@ -26,7 +26,6 @@ public enum Team {
 		this.teamName = teamName;
 		this.button = button;
 		this.chatColor = chatColor;
-		this.respawnPoint = new Location(Bukkit.getWorld("world"), 0, 100, 0);
 		
 		teamPlayers=new ArrayList<>();
 	}

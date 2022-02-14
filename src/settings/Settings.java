@@ -12,4 +12,6 @@ public class Settings {
 	
 	public static int lobbySeconds = 20;
 	
+	public static int buildSeconds = 30;
+	
 }

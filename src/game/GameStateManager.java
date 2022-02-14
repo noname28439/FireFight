@@ -16,6 +16,7 @@ public class GameStateManager {
 		currentGameState = newGS;
 		Main.pm.registerEvents(currentGameState, Main.plugin);
 		if(currentGameState!=null) currentGameState.start();
+		System.out.println("Switched GameState to "+currentGameState.getClass().getName());
 	}
 	
 	
