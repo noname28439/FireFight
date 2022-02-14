@@ -10,4 +10,6 @@ public class Settings {
 	
 	public static Material selfRepairBlockMaterial = Material.PINK_WOOL;
 	
+	public static int lobbySeconds = 20;
+	
 }
