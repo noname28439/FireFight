@@ -14,6 +14,7 @@ import game.FightState;
 import game.GameState;
 import game.GameStateManager;
 import game.LobbyState;
+import teams.TeamManager;
 
 public class Main extends JavaPlugin{
 	
@@ -41,7 +42,7 @@ public class Main extends JavaPlugin{
 		
 		//Adding Listeners
 		pm = Bukkit.getPluginManager();
-		
+		pm.registerEvents(new TeamManager(), this);
 		
 		main();
 		

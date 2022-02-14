@@ -14,6 +14,7 @@ import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.ItemStack;
 
 import settings.Settings;
+import teams.TeamManager;
 
 public class BuildState extends GameState{
 
