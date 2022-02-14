@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,7 +23,6 @@ import net.md_5.bungee.api.ChatColor;
 
 public class TeamManager implements Listener{
 
-	public static HashMap<Player, Team> teamConnector = new HashMap<>();
 	
 	public static final int MAX_BALANCE_OFFSET = 10;
 	
@@ -36,27 +36,41 @@ public class TeamManager implements Listener{
 	}
 	
 	public static Team getPlayerTeam(Player player) {
-		return teamConnector.containsKey(player) ? teamConnector.get(player) : null;
+		for(Team ct : Team.values())
+			if(ct.getTeamPlayerList().contains(player))
+				return ct;
+		return null;
+	}
+	public static Team getPlayerTeam(String playername) {
+		for(Team ct : Team.values())
+			if(ct.teamPlayers.contains(playername))
+				return ct;
+		return null;
 	}
 	
-	public static void setPlayerTeam(Player player, Team team) {
-		if(getPlayerTeam(player)!=null)
-			getPlayerTeam(player).getTeamPlayers().remove(player);
+	public static void setPlayerTeam(String playername, Team team) {
+		if(getPlayerTeam(playername)!=null)
+			getPlayerTeam(playername).removePlayer(playername);
 		
+		if(team!=null)
+			team.addPlayer(playername);
+		
+		if(Bukkit.getPlayer(playername)==null) return; //Player cant be found
+		Player player = Bukkit.getPlayer(playername);
 		if(team!=null) {
-			team.getTeamPlayers().add(player);
-			teamConnector.put(player, team);
 			player.setDisplayName(team.getChatColor()+player.getName()+ChatColor.RESET);
 			player.setPlayerListName(team.getChatColor()+player.getName()+ChatColor.RESET);
 			player.sendMessage("Du bist jetzt in Team "+team.getChatColor()+team.getTeamName());
 		}else {
-			teamConnector.remove(player);
 			player.setDisplayName(ChatColor.RESET+player.getName()+ChatColor.RESET);
 			player.setPlayerListName(ChatColor.RESET+player.getName()+ChatColor.RESET);
 			player.sendMessage("Du bist jetzt in keinem Team mehr");
 		}
 		
 	}
+	
+	
+	
 	
 	public static Inventory getSelectionInventory() {
 		Inventory inv = Bukkit.createInventory(null, 9*1,teamSelectionInventoryTitle);
@@ -81,9 +95,9 @@ public class TeamManager implements Listener{
 			return;
 		if(title.equalsIgnoreCase(TeamManager.teamSelectionInventoryTitle)) {
 			if(e.getCurrentItem().getType() == Material.BARRIER)
-				TeamManager.setPlayerTeam((Player) p, null);
+				TeamManager.setPlayerTeam(((Player) p).getName(), null);
 			else
-				TeamManager.setPlayerTeam((Player)p, TeamManager.getTeamByButtonMaterial(e.getCurrentItem().getType()));
+				TeamManager.setPlayerTeam(((Player) p).getName(), TeamManager.getTeamByButtonMaterial(e.getCurrentItem().getType()));
 			e.setCancelled(true);
 		}
 	}
@@ -91,6 +105,23 @@ public class TeamManager implements Listener{
 	public void onItemInteract(PlayerInteractEvent e) {
 		if((e.getAction()==Action.RIGHT_CLICK_AIR || e.getAction()==Action.RIGHT_CLICK_BLOCK) && GameStateManager.currentGameState == Main.LOBBY_STATE && e.getItem()!=null) 
 			if(e.getItem().getType() == Material.COMPASS) e.getPlayer().openInventory(getSelectionInventory());
+	}
+	@EventHandler
+	public void onInteract(PlayerInteractEvent e) {
+		Player p = e.getPlayer();
+		if(e.getAction()==Action.RIGHT_CLICK_AIR||e.getAction()==Action.RIGHT_CLICK_BLOCK)
+			if(e.getClickedBlock() != null)
+				if(e.getClickedBlock().getType() == Material.OAK_WALL_SIGN) {
+					Sign sign = (Sign) e.getClickedBlock().getState();
+					String[] lines = sign.getLines();
+					for(String cl : lines) {
+						cl = cl.toLowerCase();
+						if(cl.contains("rot"))
+							TeamManager.setPlayerTeam(p.getName(), Team.RED);
+						if(cl.contains("blau"))
+							TeamManager.setPlayerTeam(p.getName(), Team.BLUE);
+					}
+				}
 	}
 	
 	

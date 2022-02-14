@@ -19,7 +19,7 @@ public enum Team {
 	private Material button;
 	private Location respawnPoint;
 	
-	private ArrayList<Player> teamPlayers;
+	public ArrayList<String> teamPlayers;
 	
 	
 	private Team(String teamName, Material button, ChatColor chatColor) {
@@ -31,8 +31,18 @@ public enum Team {
 		teamPlayers=new ArrayList<>();
 	}
 	
-	public ArrayList<Player> getTeamPlayers() {
-		return teamPlayers;
+	public ArrayList<Player> getTeamPlayerList() {
+		ArrayList<Player> playerlist = new ArrayList<>();
+		for(String playername : teamPlayers)
+			playerlist.add(Bukkit.getPlayer(playername));
+		return playerlist;
+	}
+	
+	public void addPlayer(String name) {
+		teamPlayers.add(name);
+	}
+	public void removePlayer(String name) {
+		teamPlayers.remove(name);
 	}
 	
 	public String getTeamName() {
