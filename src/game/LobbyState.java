@@ -1,21 +1,36 @@
 package game;
 
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Blaze;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
+import bases.BaseManager;
 import main.Main;
+import net.minecraft.server.v1_16_R3.ItemStack;
 import settings.Settings;
 import teams.Team;
 import teams.TeamManager;
@@ -27,7 +42,7 @@ public class LobbyState extends GameState{
 	
 	@Override
 	public void start() {
-		for(Player cp : Bukkit.getOnlinePlayers()) handleJoin(cp);
+		for(Player cp : Main.getAllPlayers()) handleJoin(cp);
 		
 		LobbySchedulerID = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, new Runnable() { @Override public void run() {
 			boolean hasEveryTeamOnePlayer = true;
@@ -42,7 +57,7 @@ public class LobbyState extends GameState{
 				GameStateManager.switchGameState(Main.FIGHT_STATE);
 			}
 			
-			for(Player cp : Bukkit.getOnlinePlayers())
+			for(Player cp : Main.getAllPlayers())
 				cp.setLevel(lobbycountdown);
 		}}, 0, 20);
 		
@@ -50,17 +65,19 @@ public class LobbyState extends GameState{
 
 	@Override
 	public void stop() {
-		for(Player cp : Bukkit.getOnlinePlayers()) cp.getInventory().clear();
+		for(Player cp : Main.getAllPlayers()) cp.getInventory().clear();
 		Bukkit.getScheduler().cancelTask(LobbySchedulerID);
 	}
 
 	@Override
 	public void handleJoin(Player joined) {
+		
 		if(!joined.isOp()) {
-			joined.teleport(Settings.spawn);
-			joined.getInventory().clear();
-			joined.setGameMode(GameMode.ADVENTURE);
+			
 		}
+		joined.getInventory().clear();
+		joined.setGameMode(GameMode.ADVENTURE);
+		joined.teleport(Settings.spawn);
 		joined.getInventory().setItem(4, new ItemBuilder(Material.COMPASS, 1).setDisplayname(ChatColor.DARK_BLUE+"TeamSelector").build());
 		joined.getInventory().setItem(2, new ItemBuilder(Material.BRICKS, 1).setDisplayname(ChatColor.GOLD+"BaseManager").build());
 		TeamManager.setPlayerTeam(joined.getName(), null);
