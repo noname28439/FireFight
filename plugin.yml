@@ -10,3 +10,4 @@ commands:
    spawn:
    join:
    overwrite:
+   setgametime:

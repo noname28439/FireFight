@@ -30,7 +30,13 @@ public class Main extends JavaPlugin{
 	public static GameState 
 						LOBBY_STATE = new LobbyState(),
 						FIGHT_STATE = new FightState();
-			
+	
+	public static String base1worldname = "BaseBlueprint.default";
+	public static String base2worldname = "BaseBlueprint.default";
+	
+	public static int roundtime = 1;
+	public static int[] times = new int[] {1, 5, 10, 15, 20, 30, 45, 60, 120};
+	
 	public static String locationToString(Location input) {
 		return "["+input.getX()+"|"+input.getY()+"|"+input.getZ()+"]";
 	}
@@ -69,6 +75,7 @@ public class Main extends JavaPlugin{
 		getCommand("spawn").setExecutor(new SpawnCMD());
 		getCommand("join").setExecutor(new JoinCMD());
 		getCommand("overwrite").setExecutor(new OverwriteCMD());
+		getCommand("setgametime").setExecutor(new SetGameTimeCMD());
 		
 		
 		//Adding Listeners

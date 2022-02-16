@@ -1,36 +1,23 @@
 package game;
 
-import java.util.Random;
-
+import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Effect;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.World;
-import org.bukkit.block.Sign;
-import org.bukkit.entity.Blaze;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
-
 import bases.BaseManager;
 import main.Main;
-import net.minecraft.server.v1_16_R3.ItemStack;
 import settings.Settings;
 import teams.Team;
 import teams.TeamManager;
@@ -39,6 +26,7 @@ import util.ItemBuilder;
 public class LobbyState extends GameState{
 
 	static int LobbySchedulerID, lobbycountdown;
+	
 	
 	@Override
 	public void start() {
@@ -80,6 +68,7 @@ public class LobbyState extends GameState{
 		joined.teleport(Settings.spawn);
 		joined.getInventory().setItem(4, new ItemBuilder(Material.COMPASS, 1).setDisplayname(ChatColor.DARK_BLUE+"TeamSelector").build());
 		joined.getInventory().setItem(2, new ItemBuilder(Material.BRICKS, 1).setDisplayname(ChatColor.GOLD+"BaseManager").build());
+		joined.getInventory().setItem(6, new ItemBuilder(Material.GOLDEN_SHOVEL, 1).setDisplayname(ChatColor.GOLD+"BaseSelector").build());
 		TeamManager.setPlayerTeam(joined.getName(), null);
 		for (PotionEffect effect : joined.getActivePotionEffects())
 			joined.removePotionEffect(effect.getType());
@@ -100,5 +89,73 @@ public class LobbyState extends GameState{
 		e.setRespawnLocation(Settings.spawn);
 	}
 	
+	@EventHandler
+	public void onInventoryClick(InventoryClickEvent e) {
+		String title = e.getView().getTitle();
+		ItemStack clicked = e.getCurrentItem();
+		Player p = (Player) e.getWhoClicked();
+		if(clicked==null)
+			return;
+		if(title.equalsIgnoreCase(ChatColor.AQUA+"BaseSelector")) {
+			e.setCancelled(true);
+			
+			if(clicked.getType()!=Material.MUSIC_DISC_PIGSTEP) {
+				p.sendMessage(ChatColor.RED+"Diese Map ist nicht in der passenden Zeit gebaut!");
+				return;
+			}
+			
+			
+			if(clicked.getEnchantmentLevel(Enchantment.LUCK)!=1) {
+				p.sendMessage(ChatColor.RED+"Diese Map ist nicht bebaut!");
+				return;
+			}
+			
+			int buildid = BaseManager.blueprintIdFromName(clicked.getItemMeta().getDisplayName());
+			int buildtime = BaseManager.blueprintTimeFromName(clicked.getItemMeta().getDisplayName());
+			
+			String worldname = BaseManager.buildDataToWorldName(p, buildid, buildtime);
+			
+			
+			if(TeamManager.getPlayerTeam(p.getName())==null) {
+				p.sendMessage(ChatColor.RED+"Du musst ein Team ausgewählt haben!");
+				return;
+			}else {
+				if(TeamManager.getPlayerTeam(p.getName())==Team.BLUE) {
+					Main.base1worldname = worldname;
+				}else {
+					Main.base2worldname = worldname;
+				}
+			}
+			p.sendMessage(ChatColor.GREEN+clicked.getItemMeta().getDisplayName()+" erfolgreich als Base für Team "+TeamManager.getPlayerTeam(p.getName()).getTeamName()+" festgelegt!");
+			p.closeInventory();
+			
+		}
+	}
+	
+	
+	@EventHandler
+	public void onItemInteract(PlayerInteractEvent e) {
+		if((e.getAction()==Action.RIGHT_CLICK_AIR || e.getAction()==Action.RIGHT_CLICK_BLOCK) && GameStateManager.currentGameState == Main.LOBBY_STATE && e.getItem()!=null) 
+			if(e.getItem().getType() == Material.GOLDEN_SHOVEL) {e.setCancelled(true); openBaseManagerInv(e.getPlayer());}
+	}
+	
+	
+	public static void openBaseManagerInv(Player toOpen) {
+		int rows = 3;
+		
+		Inventory inv = Bukkit.createInventory(null, 9*rows, ChatColor.AQUA+"BaseSelector");
+		for(int i = 0; i<9; i++) {
+			int min = Main.times[i];
+			for(int r = 0; r<rows; r++) {
+				ItemBuilder item = new ItemBuilder(Main.roundtime==min ? Material.MUSIC_DISC_PIGSTEP : Material.MUSIC_DISC_11, 1).setDisplayname(ChatColor.AQUA+"Build"+r+" ("+min+"min.)");
+				if(new File(Bukkit.getServer().getWorldContainer(), BaseManager.buildDataToWorldName(toOpen, r, min)).exists())
+					item.addEnchantment(Enchantment.LUCK, 1);
+				inv.setItem(i+r*9, item.build());
+			}
+				
+		}
+		
+		toOpen.openInventory(inv);
+	}
 	
 }

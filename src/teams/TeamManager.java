@@ -35,12 +35,13 @@ public class TeamManager implements Listener{
 		return null;
 	}
 	
-	public static Team getPlayerTeam(Player player) {
-		for(Team ct : Team.values())
-			if(ct.getTeamPlayerList().contains(player))
-				return ct;
-		return null;
-	}
+	//Broken
+//	public static Team getPlayerTeam(Player player) {
+//		for(Team ct : Team.values())
+//			if(ct.getTeamPlayerList().contains(player))
+//				return ct;
+//		return null;
+//	}
 	public static Team getPlayerTeam(String playername) {
 		for(Team ct : Team.values())
 			if(ct.teamPlayers.contains(playername))

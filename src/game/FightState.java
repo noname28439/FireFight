@@ -126,6 +126,9 @@ public class FightState extends GameState{
 				new ItemStack(Material.FIRE_CHARGE, 1),
 				new ItemStack(Material.HONEYCOMB, 1),
 				new ItemStack(Material.HONEYCOMB, 1),
+				new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3),
+				new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3),
+				new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3),
 				new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3)
 				};
 		
@@ -139,12 +142,15 @@ public class FightState extends GameState{
 	World gameworld;
 	int FightTickerID,RepairTickerID;
 	int playerStartHP;
-	public HashMap<Block, Integer> blockDelays = new HashMap<>();
-	public ArrayList<Block> toSelfRepairBlocks = new ArrayList<>();
-	public HashMap<String, Integer> playerLives = new HashMap<>();
+	public HashMap<Block, Integer> blockDelays;
+	public ArrayList<Block> toSelfRepairBlocks;
+	public HashMap<String, Integer> playerLives;
 	
 	@Override
 	public void start() {
+		blockDelays = new HashMap<>();
+		toSelfRepairBlocks = new ArrayList<>();
+		playerLives = new HashMap<>();
 		
 		/*
 		 //KrawattenFreak
@@ -156,8 +162,8 @@ public class FightState extends GameState{
 		 
 		 */
 		
-		String base2name = "BaseBlueprint.6a4c3e2d-8449-4e04-83ab-02400cc281ed.1.0";
-		String base1name = "BaseBlueprint.43b6b049-77f7-4796-899b-67dc84fdcd18.5.2";
+		String base1name = Main.base1worldname;
+		String base2name = Main.base2worldname;
 		
 		World base1world = WorldManager.loadWorld(base1name);
 		World base2world = WorldManager.loadWorld(base2name);
@@ -280,11 +286,11 @@ public class FightState extends GameState{
 		
 	}
 	public void setupPlayer(Player toSetup) {
-		if(TeamManager.getPlayerTeam(toSetup)==null) { 			//no team --> Spectator
+		if(TeamManager.getPlayerTeam(toSetup.getName())==null) { 			//no team --> Spectator
 			toSetup.setGameMode(GameMode.SPECTATOR);
 			toSetup.teleport(new Location(gameworld, 0, 100, 0));
 		}else { 												//in team team --> Spectator
-			Team playerTeam = TeamManager.getPlayerTeam(toSetup);
+			Team playerTeam = TeamManager.getPlayerTeam(toSetup.getName());
 			toSetup.teleport(calculatePlayerRespawnPoint(toSetup));
 			toSetup.setGameMode(GameMode.SURVIVAL);
 			toSetup.setHealth(20);
@@ -449,7 +455,7 @@ public class FightState extends GameState{
 			if(e.getPlayer().getItemInHand().getType()==Material.HEART_OF_THE_SEA) {
 				
 				Team targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
-				while(targetTeam==TeamManager.getPlayerTeam(p))
+				while(targetTeam==TeamManager.getPlayerTeam(p.getName()))
 					targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
 				
 				Player targetPlayer = targetTeam.getTeamPlayerList().get(new Random().nextInt(targetTeam.getTeamPlayerList().size()));
@@ -471,7 +477,7 @@ public class FightState extends GameState{
 			if(e.getPlayer().getItemInHand().getType()==Material.HONEYCOMB) {
 				
 				Team targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
-				while(targetTeam==TeamManager.getPlayerTeam(p))
+				while(targetTeam==TeamManager.getPlayerTeam(p.getName()))
 					targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
 				
 				for(Player cp: targetTeam.getTeamPlayerList())

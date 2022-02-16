@@ -10,7 +10,7 @@ public class Settings {
 	
 	public static Material selfRepairBlockMaterial = Material.PINK_WOOL;
 	
-	public static int lobbySeconds = 5;
+	public static int lobbySeconds = 30;
 	
 	public static int maxBuildHeight = 50;
 	public static int maxBuildWidth = 20;

@@ -20,12 +20,14 @@ public class BuildProcess {
 	int leftbuildseconds;
 	World buildWorld;
 	public String player;
+	int buildtime;
 	
 	public Player getBuilder() {
 		return Bukkit.getPlayer(player);
 	}
 	
 	public BuildProcess(Player builder, int buildid, int buildtime) {
+		this.buildtime = buildtime;
 		player = builder.getName();
 		leftbuildseconds = buildtime*60;
 		buildWorld = WorldManager.loadWorld(BaseManager.buildDataToWorldName(builder, buildid, buildtime));
@@ -45,7 +47,7 @@ public class BuildProcess {
 				finishBuild();
 				return;
 			}
-				
+			
 			
 			BaseManager.givePlayerRandomBuildItem(getBuilder());
 			
@@ -70,7 +72,7 @@ public class BuildProcess {
 		toSetup.getInventory().addItem(new ItemStack(Material.NETHER_STAR));
 		toSetup.getInventory().addItem(new ItemStack(Material.WHITE_WOOL, 32));
 		toSetup.getInventory().addItem(new ItemStack(Material.TARGET));
-		toSetup.getInventory().addItem(new ItemStack(Material.TNT));
+		toSetup.getInventory().addItem(new ItemStack(Material.TNT, (int)(1+(buildtime/3))));
 		toSetup.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, leftbuildseconds*20, 5));
 		toSetup.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, leftbuildseconds*20, 5));
 	}

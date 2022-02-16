@@ -133,7 +133,6 @@ public class BaseManager implements Listener{
 			
 			openBuildWorld((Player)e.getWhoClicked(), buildid, time);
 			
-			
 		}
 	}
 	@EventHandler
