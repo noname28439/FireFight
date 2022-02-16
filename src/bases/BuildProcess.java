@@ -28,7 +28,7 @@ public class BuildProcess {
 	public BuildProcess(Player builder, int buildid, int buildtime) {
 		player = builder.getName();
 		leftbuildseconds = buildtime*60;
-		buildWorld = WorldManager.createEmptyWorld(BaseManager.buildDataToWorldName(builder, buildid, buildtime));
+		buildWorld = WorldManager.loadWorld(BaseManager.buildDataToWorldName(builder, buildid, buildtime));
 		buildWorld.getBlockAt(0, 5, -20).setType(Material.PINK_WOOL);
 		
 		for(int x = -10; x<10; x++)

@@ -50,7 +50,7 @@ public class FightState extends GameState{
 	static World generateWorld() {
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
 		String worldName = "InGameWorld."+ts.getYear()+"."+ts.getMonth()+"."+ts.getDay()+"."+ts.getHours()+"."+ts.getMinutes();
-		World world = WorldManager.createEmptyWorld(worldName);
+		World world = WorldManager.loadWorld(worldName);
 		world.getBlockAt(0, 10, 0).setType(Material.COBWEB);
 		world.setGameRuleValue("randomTickSpeed", "1");
 		world.setGameRuleValue("fallDamage", "false");
@@ -126,9 +126,7 @@ public class FightState extends GameState{
 				new ItemStack(Material.FIRE_CHARGE, 1),
 				new ItemStack(Material.HONEYCOMB, 1),
 				new ItemStack(Material.HONEYCOMB, 1),
-				new ItemStack(Material.HONEYCOMB, 1),
-				new ItemStack(Material.HONEYCOMB, 1),
-				new ItemStack(Material.HONEYCOMB, 1)
+				new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3)
 				};
 		
 		
@@ -149,16 +147,20 @@ public class FightState extends GameState{
 	public void start() {
 		
 		/*
-		 BaseBlueprint.6a4c3e2d-8449-4e04-83ab-02400cc281ed.1.0	//KrawattenFreak
-		 BaseBlueprint.43b6b049-77f7-4796-899b-67dc84fdcd18.5.0	//LeeDo
+		 //KrawattenFreak
+		 BaseBlueprint.6a4c3e2d-8449-4e04-83ab-02400cc281ed.1.0	
+		 
+		 //LeeDo
+		 BaseBlueprint.43b6b049-77f7-4796-899b-67dc84fdcd18.5.0	
+		 BaseBlueprint.43b6b049-77f7-4796-899b-67dc84fdcd18.5.2
 		 
 		 */
 		
-		String base2name = "BaseBlueprint.43b6b049-77f7-4796-899b-67dc84fdcd18.5.2";
+		String base2name = "BaseBlueprint.6a4c3e2d-8449-4e04-83ab-02400cc281ed.1.0";
 		String base1name = "BaseBlueprint.43b6b049-77f7-4796-899b-67dc84fdcd18.5.2";
 		
-		World base1world = Bukkit.getWorld(base1name);
-		World base2world = Bukkit.getWorld(base2name);
+		World base1world = WorldManager.loadWorld(base1name);
+		World base2world = WorldManager.loadWorld(base2name);
 		
 		
 		playerStartHP = Settings.playerHP;
@@ -235,17 +237,8 @@ public class FightState extends GameState{
 			else
 				Team.BLUE.setRespawnPoint(ct.clone().add(0.5, 1, 0.5));
 		if(original.getType()==Settings.selfRepairBlockMaterial) toSelfRepairBlocks.add(gameworld.getBlockAt(ct));
-		if(original.getType()==Material.WHITE_WOOL) {
-			if(invert)
-				newMaterial = Material.RED_WOOL;
-			else
-				newMaterial = Material.BLUE_WOOL;
-		}
-		if(newMaterial.name().toLowerCase().contains("stairs")) invert=!invert;
-		if(newMaterial.name().toLowerCase().contains("trapdoor")) invert=!invert;
 		try {
-			gameworld.getBlockAt(ct).setType(newMaterial);
-			BlockData bd = gameworld.getBlockAt(ct).getState().getBlockData();
+			BlockData bd = original.getState().getBlockData();
 			if(invert) {
 				System.out.println("invrtin "+Main.locationToString(ct));
 				if(bd instanceof Directional) {
@@ -257,6 +250,12 @@ public class FightState extends GameState{
 				}
 			}
 			gameworld.getBlockAt(ct).setBlockData(bd);
+			if(original.getType()==Material.WHITE_WOOL) {
+				if(invert)
+					gameworld.getBlockAt(ct).setType(Material.RED_WOOL);
+				else
+					gameworld.getBlockAt(ct).setType(Material.BLUE_WOOL);
+			}
 			//gameworld.getBlockAt(ct)..getBlockData()
 		}catch (Exception e) {
 			e.printStackTrace();

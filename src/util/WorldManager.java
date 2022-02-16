@@ -12,7 +12,7 @@ import org.bukkit.generator.ChunkGenerator;
 
 public class WorldManager {
 
-	public static World createEmptyWorld(String worldName) {
+	public static World loadWorld(String worldName) {
 		WorldCreator wc = new WorldCreator(worldName);
 		wc.generator(new VoidChunkGenerator());
 		World world = Bukkit.createWorld(wc);

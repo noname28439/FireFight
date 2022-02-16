@@ -67,7 +67,7 @@ public class BaseManager implements Listener{
 			else
 				toAdd = new ItemStack(Material.OBSIDIAN, 1);
 		if(choice==10)
-			if(new Random().nextInt(8)==0)
+			if(new Random().nextInt(2)==0)
 				toAdd = new ItemStack(Material.SPRUCE_FENCE, 1);
 			else
 				toAdd = new ItemStack(Settings.selfRepairBlockMaterial, new Random().nextInt(2));
@@ -80,12 +80,14 @@ public class BaseManager implements Listener{
 		if(choice==18)
 			if(new Random().nextInt(2)==0)
 				toAdd = new ItemStack(Material.ANVIL, 1);
+		if(choice==19)
+			toAdd = new ItemStack(Settings.selfRepairBlockMaterial, 1);
 		p.getInventory().addItem(toAdd);
 	}
 	
 	
 	public void openBuildWorld(Player builder, int worldid, int time) {
-		World buildword = WorldManager.createEmptyWorld(BaseManager.buildDataToWorldName(builder, worldid, time));
+		World buildword = WorldManager.loadWorld(BaseManager.buildDataToWorldName(builder, worldid, time));
 		builder.setGameMode(GameMode.SPECTATOR);
 		builder.teleport(new Location(buildword, 0, 10, 0));
 		builder.sendMessage(ChatColor.GREEN+"Du kannst /overwrite nutzen, um diese Welt neu zu bauen!");
