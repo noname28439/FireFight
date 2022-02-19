@@ -17,6 +17,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import bases.BaseManager;
+import commands.SpawnCMD;
 import main.Main;
 import settings.Settings;
 import teams.Team;
@@ -30,7 +31,10 @@ public class LobbyState extends GameState{
 	
 	@Override
 	public void start() {
-		for(Player cp : Main.getAllPlayers()) handleJoin(cp);
+		for(Player cp : Main.getAllPlayers()) {
+			handleJoin(cp);
+			TeamManager.setPlayerTeam(cp.getName(), null);
+		}
 		
 		LobbySchedulerID = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, new Runnable() { @Override public void run() {
 			boolean hasEveryTeamOnePlayer = true;
@@ -60,16 +64,16 @@ public class LobbyState extends GameState{
 	@Override
 	public void handleJoin(Player joined) {
 		
-		if(!joined.isOp()) {
-			
-		}
 		joined.getInventory().clear();
 		joined.setGameMode(GameMode.ADVENTURE);
 		joined.teleport(Settings.spawn);
-		joined.getInventory().setItem(4, new ItemBuilder(Material.COMPASS, 1).setDisplayname(ChatColor.DARK_BLUE+"TeamSelector").build());
+		joined.getInventory().setItem(4, new ItemBuilder(Material.COMPASS, 1).setDisplayname(ChatColor.GOLD+"TeamSelector").build());
 		joined.getInventory().setItem(2, new ItemBuilder(Material.BRICKS, 1).setDisplayname(ChatColor.GOLD+"BaseManager").build());
-		joined.getInventory().setItem(6, new ItemBuilder(Material.GOLDEN_SHOVEL, 1).setDisplayname(ChatColor.GOLD+"BaseSelector").build());
-		TeamManager.setPlayerTeam(joined.getName(), null);
+		joined.getInventory().setItem(3, new ItemBuilder(Material.GOLDEN_SHOVEL, 1).setDisplayname(ChatColor.GOLD+"BaseSelector").build());
+		joined.getInventory().setItem(0, new ItemBuilder(Material.CAMPFIRE, 1).setDisplayname(ChatColor.GOLD+"Spawn").build());
+		if(joined.isOp()) {
+			joined.getInventory().setItem(8, new ItemBuilder(Material.TRIDENT, 1).setDisplayname(ChatColor.GOLD+"TimeSelector").build());
+		}
 		for (PotionEffect effect : joined.getActivePotionEffects())
 			joined.removePotionEffect(effect.getType());
 		
@@ -82,7 +86,7 @@ public class LobbyState extends GameState{
 
 	//Forbidden actions
 	@EventHandler public void onDrop(PlayerDropItemEvent e) {e.setCancelled(true);}
-	@EventHandler public void onInvclick(InventoryClickEvent e) {if(!e.getWhoClicked().isOp()) e.setCancelled(true);}
+	@EventHandler public void onInvclick(InventoryClickEvent e) {if(!e.getWhoClicked().isOp() && !Main.playerBuilding((Player) e.getWhoClicked())) e.setCancelled(true);}
 	
 	
 	@EventHandler public void onPlayerRespawn(PlayerRespawnEvent e) {
@@ -96,6 +100,16 @@ public class LobbyState extends GameState{
 		Player p = (Player) e.getWhoClicked();
 		if(clicked==null)
 			return;
+		
+		if(title.equalsIgnoreCase(ChatColor.AQUA+"TimeSelector")) {
+			e.setCancelled(true);
+			if(p.isOp()) {
+				Main.roundtime = clicked.getAmount();
+				p.sendMessage(ChatColor.GREEN+"Game Time set to "+Main.roundtime+" minutes.");
+				p.closeInventory();
+			}
+		}
+		
 		if(title.equalsIgnoreCase(ChatColor.AQUA+"BaseSelector")) {
 			e.setCancelled(true);
 			
@@ -135,8 +149,12 @@ public class LobbyState extends GameState{
 	
 	@EventHandler
 	public void onItemInteract(PlayerInteractEvent e) {
-		if((e.getAction()==Action.RIGHT_CLICK_AIR || e.getAction()==Action.RIGHT_CLICK_BLOCK) && GameStateManager.currentGameState == Main.LOBBY_STATE && e.getItem()!=null) 
+		if((e.getAction()==Action.RIGHT_CLICK_AIR || e.getAction()==Action.RIGHT_CLICK_BLOCK) && GameStateManager.currentGameState == Main.LOBBY_STATE && e.getItem()!=null) {
+			if(e.getItem().getType()==Material.CAMPFIRE) { SpawnCMD.tpSpawn(e.getPlayer());}
 			if(e.getItem().getType() == Material.GOLDEN_SHOVEL) {e.setCancelled(true); openBaseManagerInv(e.getPlayer());}
+			if(e.getItem().getType() == Material.TRIDENT) {e.setCancelled(true); if(e.getPlayer().isOp()) {openTimeManagerInv(e.getPlayer());}}
+		}
+			
 	}
 	
 	
@@ -147,11 +165,23 @@ public class LobbyState extends GameState{
 		for(int i = 0; i<9; i++) {
 			int min = Main.times[i];
 			for(int r = 0; r<rows; r++) {
-				ItemBuilder item = new ItemBuilder(Main.roundtime==min ? Material.MUSIC_DISC_PIGSTEP : Material.MUSIC_DISC_11, 1).setDisplayname(ChatColor.AQUA+"Build"+r+" ("+min+"min.)");
+				ItemBuilder item = new ItemBuilder(Main.roundtime>=min ? Material.MUSIC_DISC_PIGSTEP : Material.MUSIC_DISC_11, 1).setDisplayname(ChatColor.AQUA+"Build"+r+" ("+min+"min.)");
 				if(new File(Bukkit.getServer().getWorldContainer(), BaseManager.buildDataToWorldName(toOpen, r, min)).exists())
 					item.addEnchantment(Enchantment.LUCK, 1);
 				inv.setItem(i+r*9, item.build());
 			}
+				
+		}
+		
+		toOpen.openInventory(inv);
+	}
+	
+	public static void openTimeManagerInv(Player toOpen) {
+		Inventory inv = Bukkit.createInventory(null, 9, ChatColor.AQUA+"TimeSelector");
+		for(int i = 0; i<9; i++) {
+			int min = Main.times[i];
+			inv.setItem(i, new ItemBuilder(Material.EMERALD, min).addEnchantment(Enchantment.LUCK, 1).build());
+			
 				
 		}
 		

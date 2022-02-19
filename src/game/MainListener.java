@@ -18,6 +18,7 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import commands.SpawnCMD;
 import main.Main;
 import settings.Settings;
 import util.InGameBuildTools;
@@ -30,14 +31,9 @@ public class MainListener implements Listener {
 	@EventHandler
 	public void onPlayerDie(PlayerDeathEvent e) {
 		//Force AutoRespawn
-		Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, new Runnable() {
-			
-			@Override
-			public void run() {
-				e.getEntity().spigot().respawn();
-				
-			}
-		}, 1*20);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, new Runnable() { @Override public void run() {
+			e.getEntity().spigot().respawn();
+		}}, 1*20);
 	}
 	@EventHandler
 	public void OnPlayerDamageHanging(HangingBreakByEntityEvent  e) {
@@ -59,12 +55,15 @@ public class MainListener implements Listener {
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
 		
-		if(!playerBuildStartPoints.containsKey(p))
-			playerBuildStartPoints.put(p, null);
-		if(!playerBuildEndPoints.containsKey(p))
-			playerBuildEndPoints.put(p, null);
+		
+		
 		
 		if(p.getInventory().getItemInMainHand()!=null) {
+			if(!playerBuildStartPoints.containsKey(p))
+				playerBuildStartPoints.put(p, null);
+			if(!playerBuildEndPoints.containsKey(p))
+				playerBuildEndPoints.put(p, null);
+			
 			ItemStack inHand = p.getInventory().getItemInMainHand();
 			
 			if(inHand.getType()==Material.NETHER_STAR) {
@@ -97,9 +96,9 @@ public class MainListener implements Listener {
 							newPos.setY(Settings.maxBuildHeight);
 							playerBuildEndPoints.put(p, newPos);
 						}
-			
+					InGameBuildTools.markArea(p, MainListener.playerBuildStartPoints.get(p), MainListener.playerBuildEndPoints.get(p), 3);
 			}
-			InGameBuildTools.markArea(p, MainListener.playerBuildStartPoints.get(p), MainListener.playerBuildEndPoints.get(p), 3);
+			
 		}	
 	}
 	

@@ -1,4 +1,4 @@
-package main;
+package commands;
 
 import java.io.File;
 
@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import bases.BaseManager;
 import bases.BuildProcess;
+import main.Main;
 import util.WorldManager;
 
 public class OverwriteCMD implements CommandExecutor {
@@ -20,8 +21,14 @@ public class OverwriteCMD implements CommandExecutor {
 	public boolean onCommand(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
 		Player p = (Player) arg0;
 		
+		if(Main.playerBuilding(p)) {
+			p.sendMessage(ChatColor.RED+"Du kannst diesen Befehl gerade nicht nutzen!");
+			return false;
+		}
+		
 		if(!p.getWorld().getName().startsWith("BaseBlueprint")) {
 			p.sendMessage(ChatColor.RED+"Du kannst diesen Befehl gerade nicht nutzen!");
+			return false;
 		}
 		
 		String worldname = p.getWorld().getName();
@@ -32,7 +39,7 @@ public class OverwriteCMD implements CommandExecutor {
 		int bpid = Integer.valueOf(worldname.split("\\.")[3]);
 		int bptime = Integer.valueOf(worldname.split("\\.")[2]);
 		
-		BaseManager.buildProcesses.add(new BuildProcess(p, bpid, bptime));
+		BaseManager.buildProcesses.add(new BuildProcess(p, bpid, bptime, true));
 		
 		
 		

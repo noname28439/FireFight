@@ -135,7 +135,7 @@ public class FightState extends GameState{
 		
 		ItemStack result = lootTable[new Random().nextInt(lootTable.length)];
 		
-		dropLoc.getWorld().dropItem(dropLoc, result);
+		dropLoc.getWorld().dropItem(dropLoc.clone().add(0.5, 1, 0.5), result);
 		
 	}
 	
@@ -405,7 +405,7 @@ public class FightState extends GameState{
 		Player p = e.getPlayer();
 		
 			if(e.getBlock().getType()==Material.TNT)
-				e.getBlock().getLocation().getWorld().createExplosion(e.getBlock().getLocation(), 2, false);
+				e.setDropItems(true);
 		
 		if(e.getBlock().getType()==Settings.selfRepairBlockMaterial)
 			if(toSelfRepairBlocks.contains(e.getBlock()))
@@ -533,7 +533,7 @@ public class FightState extends GameState{
 						else
 							result = new ItemStack(Material.FEATHER, 1);
 					
-					p.getWorld().dropItem(e.getClickedBlock().getLocation().add(0, 1, 0), result);
+					p.getWorld().dropItem(e.getClickedBlock().getLocation().add(0.5, 1, 0.5), result);
 					
 					blockDelays.put(e.getClickedBlock(), 15);
 				}

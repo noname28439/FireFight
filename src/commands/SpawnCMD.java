@@ -15,11 +15,16 @@ public class SpawnCMD implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
-		if(GameStateManager.currentGameState == Main.LOBBY_STATE)
-			Main.LOBBY_STATE.handleJoin(((Player)arg0));
-		else
-			((Player)arg0).sendMessage(ChatColor.RED+" only in Lobby available!");
+		Player p = (Player) arg0;
+		tpSpawn(p);
 		return false;
 	}
 
+	public static void tpSpawn(Player p) {
+		if(GameStateManager.currentGameState == Main.LOBBY_STATE)
+			Main.LOBBY_STATE.handleJoin(p);
+		else
+			p.sendMessage(ChatColor.RED+" only in Lobby available!");
+	}
+	
 }

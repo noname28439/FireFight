@@ -11,7 +11,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import bases.BaseManager;
 import bases.BuildProcess;
 import commands.BuildCMD;
+import commands.EditCMD;
 import commands.JoinCMD;
+import commands.OverwriteCMD;
+import commands.SetGameTimeCMD;
 import commands.SpawnCMD;
 import commands.SpectateCMD;
 import commands.TestCMD;
@@ -35,7 +38,7 @@ public class Main extends JavaPlugin{
 	public static String base2worldname = "BaseBlueprint.default";
 	
 	public static int roundtime = 1;
-	public static int[] times = new int[] {1, 5, 10, 15, 20, 30, 45, 60, 120};
+	public static int[] times = new int[] {1, 2, 3, 5, 10, 15, 20, 30, 60};
 	
 	public static String locationToString(Location input) {
 		return "["+input.getX()+"|"+input.getY()+"|"+input.getZ()+"]";
@@ -76,6 +79,7 @@ public class Main extends JavaPlugin{
 		getCommand("join").setExecutor(new JoinCMD());
 		getCommand("overwrite").setExecutor(new OverwriteCMD());
 		getCommand("setgametime").setExecutor(new SetGameTimeCMD());
+		getCommand("edit").setExecutor(new EditCMD());
 		
 		
 		//Adding Listeners

@@ -88,15 +88,20 @@ public class BaseManager implements Listener{
 	
 	public void openBuildWorld(Player builder, int worldid, int time) {
 		World buildword = WorldManager.loadWorld(BaseManager.buildDataToWorldName(builder, worldid, time));
+		buildword.setTime(1000);
+		buildword.setWeatherDuration(0);
+		buildword.setGameRuleValue("doDaylightCycle", "false");
+		buildword.setGameRuleValue("doWeatherCycle", "false");
 		builder.setGameMode(GameMode.SPECTATOR);
 		builder.teleport(new Location(buildword, 0, 10, 0));
-		builder.sendMessage(ChatColor.GREEN+"Du kannst /overwrite nutzen, um diese Welt neu zu bauen!");
+		builder.sendMessage(ChatColor.GREEN+"Du kannst /edit nutzen, um diese Welt zu bearbeiten!");
+		builder.sendMessage(ChatColor.GRAY+"Du kannst /overwrite nutzen, um diese Welt neu zu bebauen!");
 	}
 	
 	
 	public static void openBaseManagerInv(Player toOpen) {
 		int rows = 3;
-		int[] times = new int[] {1, 5, 10, 15, 20, 30, 45, 60, 120};
+		int[] times = Main.times;
 		Inventory inv = Bukkit.createInventory(null, 9*rows, ChatColor.AQUA+"BaseManager");
 		for(int i = 0; i<9; i++) {
 			int min = times[i];

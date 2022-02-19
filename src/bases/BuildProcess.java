@@ -21,17 +21,25 @@ public class BuildProcess {
 	World buildWorld;
 	public String player;
 	int buildtime;
+	boolean overwrite;
 	
 	public Player getBuilder() {
 		return Bukkit.getPlayer(player);
 	}
 	
-	public BuildProcess(Player builder, int buildid, int buildtime) {
+	public BuildProcess(Player builder, int buildid, int buildtime, boolean overwrite) {
+		this.overwrite = overwrite;
 		this.buildtime = buildtime;
 		player = builder.getName();
-		leftbuildseconds = buildtime*60;
+		leftbuildseconds = overwrite ? buildtime*60 : -1;
 		buildWorld = WorldManager.loadWorld(BaseManager.buildDataToWorldName(builder, buildid, buildtime));
-		buildWorld.getBlockAt(0, 5, -20).setType(Material.PINK_WOOL);
+		if(overwrite)
+			buildWorld.getBlockAt(0, 5, -20).setType(Material.PINK_WOOL);
+		
+		buildWorld.setTime(1000);
+		buildWorld.setWeatherDuration(0);
+		buildWorld.setGameRuleValue("doDaylightCycle", "false");
+		buildWorld.setGameRuleValue("doWeatherCycle", "false");
 		
 		for(int x = -10; x<10; x++)
 			for(int y = 3; y<30; y++)
@@ -48,16 +56,14 @@ public class BuildProcess {
 				return;
 			}
 			
-			
-			BaseManager.givePlayerRandomBuildItem(getBuilder());
-			
-			if(leftbuildseconds<=0) {
-				finishBuild();
+			if(leftbuildseconds>=0) {
+				BaseManager.givePlayerRandomBuildItem(getBuilder());
+				getBuilder().setLevel(leftbuildseconds);
 			}
 			
 			
 			
-			getBuilder().setLevel(leftbuildseconds);
+			
 			
 		}}, 1*20, 1*20);
 	}
@@ -69,12 +75,15 @@ public class BuildProcess {
 		
 		//Adding buildStartItems
 		toSetup.getInventory().clear();
-		toSetup.getInventory().addItem(new ItemStack(Material.NETHER_STAR));
-		toSetup.getInventory().addItem(new ItemStack(Material.WHITE_WOOL, 32));
-		toSetup.getInventory().addItem(new ItemStack(Material.TARGET));
-		toSetup.getInventory().addItem(new ItemStack(Material.TNT, (int)(1+(buildtime/3))));
+		if(overwrite) {
+			toSetup.getInventory().addItem(new ItemStack(Material.NETHER_STAR));
+			toSetup.getInventory().addItem(new ItemStack(Material.WHITE_WOOL, 32));
+			toSetup.getInventory().addItem(new ItemStack(Material.TARGET));
+			toSetup.getInventory().addItem(new ItemStack(Material.TNT, (int)(1+(buildtime/3))));
+		}
 		toSetup.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, leftbuildseconds*20, 5));
 		toSetup.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, leftbuildseconds*20, 5));
+		
 	}
 	
 	public void finishBuild() {
