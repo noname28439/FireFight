@@ -1,21 +1,32 @@
 package game;
 
 import java.io.File;
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
 import bases.BaseManager;
 import commands.SpawnCMD;
 import main.Main;
@@ -85,8 +96,8 @@ public class LobbyState extends GameState{
 	}
 
 	//Forbidden actions
-	@EventHandler public void onDrop(PlayerDropItemEvent e) {e.setCancelled(true);}
-	@EventHandler public void onInvclick(InventoryClickEvent e) {if(!e.getWhoClicked().isOp() && !Main.playerBuilding((Player) e.getWhoClicked())) e.setCancelled(true);}
+	@EventHandler public void onDrop(PlayerDropItemEvent e) {if(hideAndSeekEnabled(e.getPlayer())) return;e.setCancelled(true);}
+	@EventHandler public void onInvclick(InventoryClickEvent e) {if(hideAndSeekEnabled(e.getWhoClicked())) return; if(!e.getWhoClicked().isOp() && !Main.playerBuilding((Player) e.getWhoClicked())) e.setCancelled(true);}
 	
 	
 	@EventHandler public void onPlayerRespawn(PlayerRespawnEvent e) {
@@ -187,5 +198,110 @@ public class LobbyState extends GameState{
 		
 		toOpen.openInventory(inv);
 	}
+	
+	
+	
+	
+	//HideAndSeek
+	
+	public static boolean hideAndSeekEnabled(Entity p) {
+		return (p.getWorld().getName().equals("world") && Settings.hideAndSeek);
+	}
+	
+	
+	@EventHandler
+	public void OnPlayerDamage(EntityDamageByEntityEvent e) {
+		if(!hideAndSeekEnabled(e.getEntity())) return;
+		if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
+            Player whoWasHit = (Player) e.getEntity();
+            Player whoHit = (Player) e.getDamager();
+            //whoHit.sendMessage("Du hast "+e.getDamage()+" Damage gemacht!");
+            
+            if(whoWasHit.getPotionEffect(PotionEffectType.LUCK)!=null)
+				if(whoWasHit.getPotionEffect(PotionEffectType.LUCK).getAmplifier()==200)
+					e.setCancelled(true);
+            
+            if(Main.isHunter(whoWasHit.getName())) {
+            	if(!whoWasHit.isBlocking()) {
+//	            		whoWasHit.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5*20, 255));
+		            whoWasHit.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 3*20, 200));
+		            whoWasHit.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 5*20, 200));
+		            whoWasHit.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 3*20, 200));
+        }}}
+		if (e.getEntity() instanceof Player && e.getDamager() instanceof Arrow) {
+            Player whoWasHit = (Player) e.getEntity();
+            Arrow whoHit = (Arrow) e.getDamager();
+            
+            if(whoWasHit.getPotionEffect(PotionEffectType.LUCK)!=null)
+				if(whoWasHit.getPotionEffect(PotionEffectType.LUCK).getAmplifier()==200)
+					e.setCancelled(true);
+            
+            if(Main.isHunter(whoWasHit.getName())) {
+            	if(!whoWasHit.isBlocking()) {
+//	            		whoWasHit.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5*20, 255));
+		            whoWasHit.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 3*20, 200));
+		            whoWasHit.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 5*20, 200));
+		            whoWasHit.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 3*20, 200));
+       }}}}
+	
+	@EventHandler
+	public void OnPlayerMove(PlayerMoveEvent e) {
+		if(!hideAndSeekEnabled(e.getPlayer())) return;
+			
+			Location movedFrom = e.getFrom();
+	        Location movedTo = e.getTo();
+	        if ((movedFrom.getX() != movedTo.getX() || movedFrom.getY() != movedTo.getY() || movedFrom.getZ() != movedTo.getZ()) && e.getPlayer().isOnGround()) {
+					if(e.getPlayer().getPotionEffect(PotionEffectType.FIRE_RESISTANCE)!=null) {
+						if(e.getPlayer().getPotionEffect(PotionEffectType.FIRE_RESISTANCE).getAmplifier()==200) {
+							//e.setTo(new Location(e.getPlayer().getWorld(),movedFrom.getX() ,movedFrom.getY(), movedFrom.getZ(), e.getPlayer().getLocation().getYaw(), e.getPlayer().getLocation().getPitch()));
+							e.getPlayer().setWalkSpeed(0f);
+							
+						}	
+					}else {
+						e.getPlayer().setWalkSpeed(0.2f);
+					}
+					
+							
+	        }
+	        if(Main.isHunter(e.getPlayer().getName())) {
+	        	if(new Random().nextInt(1000)==0)
+	        		e.getPlayer().getInventory().addItem(new ItemStack(Material.ENDER_EYE, 1));
+	        }else {
+	        	
+	        }
+	        if(new Random().nextInt(500)==0) {
+        		Location dropLoc = e.getPlayer().getLocation();
+        		Bukkit.getScheduler().scheduleSyncDelayedTask(Main.plugin, new Runnable() {
+					@Override
+					public void run() {
+						if(new Random().nextInt(4)==0)
+							e.getPlayer().getWorld().dropItem(dropLoc, new ItemStack(Material.ENDER_PEARL));
+						else
+							e.getPlayer().getWorld().dropItem(dropLoc, new ItemStack(Material.ARROW));
+						
+					}
+				}, (new Random().nextInt(20)+20)*20);
+        	}
+	}
+	
+	@EventHandler
+	public void onPlayerDie(PlayerDeathEvent e) {
+		if(!hideAndSeekEnabled(e.getEntity())) return;
+		e.getEntity().setGameMode(GameMode.SPECTATOR);
+	}
+	
+	@EventHandler
+	public void onInteract(PlayerInteractEvent e) {
+		if(!hideAndSeekEnabled(e.getPlayer())) return;
+		Player p = e.getPlayer();
+		if(e.getClickedBlock()!=null) {
+			if(e.getClickedBlock().getType().toString().toLowerCase().contains("warped"))
+				e.setCancelled(true);
+			if(Main.isHunter(p.getName())|| p.getGameMode()==GameMode.CREATIVE) {
+				e.setCancelled(false);
+			}
+		}
+	}
+	
 	
 }

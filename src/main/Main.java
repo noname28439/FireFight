@@ -4,9 +4,12 @@ import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 
 import bases.BaseManager;
 import bases.BuildProcess;
@@ -44,6 +47,19 @@ public class Main extends JavaPlugin{
 		return "["+input.getX()+"|"+input.getY()+"|"+input.getZ()+"]";
 	}
 	
+	public static boolean isHunter(String name) {
+		Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+		Objective obj = board.getObjective("Sucher");
+		for(OfflinePlayer cp : Bukkit.getOfflinePlayers()) {
+			if(cp.getName().equalsIgnoreCase(name)) {
+				if(obj.getScore(cp).getScore()==1)
+					return true;
+				else
+					return false;
+			}
+		}
+		return false;
+	}
 	
 	public static boolean playerBuilding(Player p) {
 		for(BuildProcess cbp : BaseManager.buildProcesses) {
