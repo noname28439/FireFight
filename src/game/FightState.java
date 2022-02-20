@@ -129,7 +129,10 @@ public class FightState extends GameState{
 				new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3),
 				new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3),
 				new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3),
-				new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3)
+				new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3),
+				new ItemStack(Material.NAUTILUS_SHELL, 1),
+				new ItemStack(Material.NAUTILUS_SHELL, 1),
+				new ItemStack(Material.NAUTILUS_SHELL, 1)
 				};
 		
 		
@@ -499,6 +502,22 @@ public class FightState extends GameState{
 					}
 				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
 			}
+			
+			if(e.getPlayer().getItemInHand().getType()==Material.NAUTILUS_SHELL) {
+				Team targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
+				while(targetTeam==TeamManager.getPlayerTeam(p.getName()))
+					targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
+				
+				Player targetPlayer = targetTeam.getTeamPlayerList().get(new Random().nextInt(targetTeam.getTeamPlayerList().size()));
+				while(targetPlayer.getGameMode()!=GameMode.SURVIVAL)
+					targetPlayer = targetTeam.getTeamPlayerList().get(new Random().nextInt(targetTeam.getTeamPlayerList().size()));
+				
+				for(int i = 0; i<5; i++) {
+					targetPlayer.getWorld().spawnEntity(targetPlayer.getLocation().clone().add(0, 10, 0), EntityType.ARROW);
+				}
+				
+				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
+			}
 		}
 		
 		//Pull items from tnt
@@ -576,7 +595,7 @@ public class FightState extends GameState{
 			if(projectile.getType().equals(EntityType.TRIDENT)) {
 				e.getEntity().getLocation().getWorld().createExplosion(e.getEntity().getLocation(), 3, true);
 				
-				for(Player cp : Bukkit.getOnlinePlayers())
+				for(Player cp : Main.getAllPlayers())
 					cp.playSound(projectile.getLocation(), Sound.BLOCK_ANVIL_LAND, 15, 1);
 					double radius = 0.1;
 					  int n = 8;
@@ -617,6 +636,18 @@ public class FightState extends GameState{
 					else if(new Random().nextInt(2)==0)
 						e.getHitBlock().setType(Material.AIR);
 				}	
+			}
+			if(projectile.getType().equals(EntityType.ENDER_PEARL)) {
+				if(e.getHitBlock()!=null) {
+					if(e.getHitBlock().getType()==Settings.selfRepairBlockMaterial) {
+						e.getHitBlock().setType(Material.ACACIA_LEAVES);
+						for(Player cp : Main.getAllPlayers())
+							cp.playSound(projectile.getLocation(), Sound.ENTITY_VILLAGER_HURT, 15, 1);
+						if(e.getHitBlock().getType()==Settings.selfRepairBlockMaterial)
+							if(toSelfRepairBlocks.contains(e.getHitBlock()))
+								toSelfRepairBlocks.remove(e.getHitBlock());
+					}
+				}
 			}
 			e.getEntity().remove();
 	}
