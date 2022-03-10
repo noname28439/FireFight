@@ -79,6 +79,8 @@ public class BuildProcess {
 			toSetup.getInventory().addItem(new ItemStack(Material.NETHER_STAR));
 			toSetup.getInventory().addItem(new ItemStack(Material.WHITE_WOOL, 32));
 			toSetup.getInventory().addItem(new ItemStack(Material.TARGET));
+			toSetup.getInventory().addItem(new ItemStack(Material.DIAMOND_AXE));
+			toSetup.getInventory().addItem(new ItemStack(Material.DIAMOND_PICKAXE));
 			toSetup.getInventory().addItem(new ItemStack(Material.TNT, (int)(1+(buildtime/3))));
 		}
 		toSetup.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, leftbuildseconds*20, 5));

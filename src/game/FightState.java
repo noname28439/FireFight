@@ -69,17 +69,14 @@ public class FightState extends GameState{
 				new ItemStack(Material.SLIME_BALL, random.nextInt(3)+1),
 				new ItemStack(Material.REDSTONE, random.nextInt(5)+1),
 				new ItemStack(Material.PINK_WOOL, random.nextInt(4)+1),
-				new ItemStack(Material.DARK_OAK_BUTTON, random.nextInt(4)+1),
-				new ItemStack(Material.CRIMSON_DOOR, random.nextInt(2)+1),
-				new ItemStack(Material.WARPED_PRESSURE_PLATE, random.nextInt(2)+1),
 				new ItemStack(Material.LEVER, random.nextInt(2)+1),
 				new ItemStack(Material.REPEATER, random.nextInt(2)+1),
 				new ItemStack(Material.OBSERVER, random.nextInt(2)+1),
 				new ItemStack(Material.DISPENSER, random.nextInt(2)+1),
 				new ItemStack(Material.SCAFFOLDING, random.nextInt(6)+1),
-				new ItemStack(Material.PINK_WOOL, random.nextInt(4)+1),
-				new ItemStack(Material.PINK_WOOL, random.nextInt(4)+1),
-				new ItemStack(Material.PINK_WOOL, random.nextInt(4)+1),
+				new ItemStack(Material.PINK_WOOL, random.nextInt(6)+3),
+				new ItemStack(Material.PINK_WOOL, random.nextInt(6)+3),
+				new ItemStack(Material.PINK_WOOL, random.nextInt(6)+3),
 				new ItemStack(Material.CHICKEN_SPAWN_EGG, random.nextInt(2)+1),
 				new ItemStack(Material.WHEAT_SEEDS, random.nextInt(9)+1),
 				new ItemStack(Material.ENDER_PEARL, 1),
@@ -88,22 +85,15 @@ public class FightState extends GameState{
 				new ItemStack(Material.SHIELD, 1),
 				new ItemStack(Material.OBSIDIAN, 1),
 				new ItemStack(Material.BELL, random.nextInt(2)+1),
-				new ItemStack(Material.GRAY_WOOL, random.nextInt(10)+5),
-				new ItemStack(Material.GRAY_WOOL, random.nextInt(10)+5),
-				new ItemStack(Material.GRAY_WOOL, random.nextInt(10)+5),
-				new ItemStack(Material.GRAY_WOOL, random.nextInt(10)+5),
+				new ItemStack(Material.GRAY_WOOL, random.nextInt(20)+10),
 				new ItemStack(Material.DRAGON_HEAD, 1),
 				new ItemStack(Material.DIAMOND, random.nextInt(2)+1),
 				new ItemStack(Material.COBWEB, 1),
 				new ItemStack(Material.CAULDRON, 1),
-				new ItemStack(Material.BIRCH_BOAT, 1),
-				new ItemStack(Material.MINECART, 1),
 				new ItemStack(Material.CHEST, 1),
-				new ItemStack(Material.GOLDEN_APPLE, new Random().nextInt(2)+2),
-				new ItemStack(Material.GOLDEN_APPLE, new Random().nextInt(2)+2),
-				new ItemStack(Material.GOLDEN_APPLE, new Random().nextInt(2)+2),
-				new ItemStack(Material.GOLDEN_APPLE, new Random().nextInt(2)+2),
-				new ItemStack(Material.GOLDEN_APPLE, new Random().nextInt(2)+2),
+				new ItemStack(Material.GOLDEN_APPLE, new Random().nextInt(5)+2),
+				new ItemStack(Material.GOLDEN_APPLE, new Random().nextInt(6)+2),
+				new ItemStack(Material.GOLDEN_APPLE, new Random().nextInt(7)+2),
 				new ItemStack(Material.DIAMOND_SWORD, 1),
 				new ItemStack(Material.SPECTRAL_ARROW, random.nextInt(2)+1),
 				new ItemStack(Material.FEATHER, random.nextInt(2)+1),
@@ -121,18 +111,20 @@ public class FightState extends GameState{
 				new ItemStack(Material.COOKED_CHICKEN, random.nextInt(5)+4),
 				new ItemStack(Material.COOKED_CHICKEN, random.nextInt(5)+4),
 				new ItemStack(Material.FIRE_CHARGE, 1),
-				new ItemStack(Material.FIRE_CHARGE, 1),
-				new ItemStack(Material.FIRE_CHARGE, 1),
-				new ItemStack(Material.FIRE_CHARGE, 1),
+				new ItemStack(Material.FIRE_CHARGE, random.nextInt(2)+1),
 				new ItemStack(Material.HONEYCOMB, 1),
 				new ItemStack(Material.HONEYCOMB, 1),
 				new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3),
 				new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3),
 				new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3),
-				new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3),
 				new ItemStack(Material.NAUTILUS_SHELL, 1),
 				new ItemStack(Material.NAUTILUS_SHELL, 1),
-				new ItemStack(Material.NAUTILUS_SHELL, 1)
+				new ItemStack(Material.NAUTILUS_SHELL, 1),
+				new ItemStack(Material.NAUTILUS_SHELL, 1),
+				new ItemStack(Material.BEETROOT_SOUP, 1),
+				new ItemStack(Material.BEETROOT_SOUP, 1),
+				new ItemStack(Material.BEETROOT_SOUP, 2),
+				new ItemStack(Material.BEETROOT_SOUP, 2),
 				};
 		
 		
@@ -304,10 +296,11 @@ public class FightState extends GameState{
 			bowMeta.addEnchant(Enchantment.ARROW_KNOCKBACK,3, true);
 			bow.setItemMeta(bowMeta);
 			toSetup.getInventory().addItem(bow);
-			toSetup.getInventory().addItem(new ItemStack(Material.ARROW, 1));
+			toSetup.getInventory().addItem(new ItemStack(Material.ARROW, 5));
 			toSetup.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 10));
 			toSetup.getInventory().addItem(new ItemStack(Material.GRAY_WOOL, 32));
-			toSetup.getInventory().addItem(new ItemStack(Material.FEATHER, 1));
+			toSetup.getInventory().addItem(new ItemStack(Material.FEATHER, 2));
+			toSetup.getInventory().addItem(new ItemStack(Material.SHEARS, 1));
 			
 			//toSetup.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 99999, 2));
 		}
@@ -395,14 +388,6 @@ public class FightState extends GameState{
 	}
 	
 	@EventHandler
-	public void onRepairBlockPlace(BlockPlaceEvent e) {
-		if(Main.playerBuilding(e.getPlayer())) return;
-		if(e.getBlock().getType()==Settings.selfRepairBlockMaterial) {
-			toSelfRepairBlocks.add(e.getBlock());
-		}
-	}
-	
-	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) {
 		if(Main.playerBuilding(e.getPlayer())) return;
 		Player p = e.getPlayer();
@@ -419,6 +404,7 @@ public class FightState extends GameState{
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
 		if(Main.playerBuilding(e.getPlayer())) return;
+		if(e.getPlayer().getGameMode() != GameMode.SURVIVAL) return;
 		Player p = e.getPlayer();
 		
 		
@@ -485,6 +471,18 @@ public class FightState extends GameState{
 				
 				for(Player cp: targetTeam.getTeamPlayerList())
 					cp.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 30*20, 1));
+				
+				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
+			}
+			
+			if(e.getPlayer().getItemInHand().getType()==Material.BEETROOT_SOUP) {
+				
+				Team targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
+				while(targetTeam==TeamManager.getPlayerTeam(p.getName()))
+					targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
+				
+				for(Player cp: targetTeam.getTeamPlayerList())
+					cp.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 30*20, 1));
 				
 				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
 			}
@@ -582,6 +580,11 @@ public class FightState extends GameState{
 		if(e.getBlock().getLocation().getBlockY()>Settings.maxBuildHeight) {
 			e.setCancelled(true);
 			p.sendMessage("Hör auf Skybases zu Bauen, du Scheißkind!");
+		}
+		
+		if(Main.playerBuilding(e.getPlayer())) return;
+		if(e.getBlock().getType()==Settings.selfRepairBlockMaterial && !e.isCancelled()) {
+			toSelfRepairBlocks.add(e.getBlock());
 		}
 	}
 	

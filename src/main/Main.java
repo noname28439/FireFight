@@ -40,7 +40,7 @@ public class Main extends JavaPlugin{
 	public static String base1worldname = "BaseBlueprint.default";
 	public static String base2worldname = "BaseBlueprint.default";
 	
-	public static int roundtime = 1;
+	public static int roundtime = 0;
 	public static int[] times = new int[] {1, 2, 3, 5, 10, 15, 20, 30, 60};
 	
 	public static String locationToString(Location input) {

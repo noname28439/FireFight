@@ -18,6 +18,6 @@ public class Settings {
 	
 	public static int playerHP = 5;
 	
-	public static boolean hideAndSeek = true;
+	public static boolean hideAndSeek = false;
 	
 }
