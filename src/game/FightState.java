@@ -125,6 +125,9 @@ public class FightState extends GameState{
 				new ItemStack(Material.BEETROOT_SOUP, 1),
 				new ItemStack(Material.BEETROOT_SOUP, 2),
 				new ItemStack(Material.BEETROOT_SOUP, 2),
+				new ItemStack(Material.MILK_BUCKET, 2),
+				new ItemStack(Material.MILK_BUCKET, 2),
+				new ItemStack(Material.MILK_BUCKET, 2),
 				};
 		
 		
@@ -277,8 +280,12 @@ public class FightState extends GameState{
 
 	@Override
 	public void handleJoin(Player joined) {
-		setupPlayer(joined);
-		
+		if(playerLives.containsKey(joined.getName()))
+		if(playerLives.get(joined.getName())<=0) {
+			joined.setGameMode(GameMode.SPECTATOR);
+			joined.teleport(new Location(gameworld, 0, 100, 0));
+		}else
+			setupPlayer(joined);
 	}
 	public void setupPlayer(Player toSetup) {
 		if(TeamManager.getPlayerTeam(toSetup.getName())==null) { 			//no team --> Spectator
@@ -451,8 +458,6 @@ public class FightState extends GameState{
 				while(targetPlayer.getGameMode()!=GameMode.SURVIVAL)
 					targetPlayer = targetTeam.getTeamPlayerList().get(new Random().nextInt(targetTeam.getTeamPlayerList().size()));
 				
-				p.sendMessage("Player: "+targetPlayer);
-				
 				Location toBomb = targetPlayer.getLocation();
 				
 				for(int i = 0; i<20;i++) {
@@ -481,8 +486,12 @@ public class FightState extends GameState{
 				while(targetTeam==TeamManager.getPlayerTeam(p.getName()))
 					targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
 				
-				for(Player cp: targetTeam.getTeamPlayerList())
-					cp.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 30*20, 1));
+				Player targetPlayer = targetTeam.getTeamPlayerList().get(new Random().nextInt(targetTeam.getTeamPlayerList().size()));
+				while(targetPlayer.getGameMode()!=GameMode.SURVIVAL)
+					targetPlayer = targetTeam.getTeamPlayerList().get(new Random().nextInt(targetTeam.getTeamPlayerList().size()));
+				
+				
+				targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 10*20, 1));
 				
 				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
 			}

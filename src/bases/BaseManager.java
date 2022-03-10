@@ -82,6 +82,8 @@ public class BaseManager implements Listener{
 				toAdd = new ItemStack(Material.ANVIL, 1);
 		if(choice==19)
 			toAdd = new ItemStack(Settings.selfRepairBlockMaterial, 1);
+		if(choice==20)
+			toAdd = new ItemStack(Material.TORCH, new Random().nextInt(2)+1);
 		p.getInventory().addItem(toAdd);
 	}
 	
