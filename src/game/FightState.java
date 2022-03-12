@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Set;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -61,73 +63,58 @@ public class FightState extends GameState{
 		return world;
 	}
 	
+	
+	public static void dropHealItem(Location dropLoc) {
+		Random random = new Random();
+		ItemStack[] lootTable = new ItemStack[] {
+			new ItemStack(Material.GOLDEN_APPLE, random.nextInt(5)+3),
+			new ItemStack(Material.ENCHANTED_GOLDEN_APPLE, 1),
+			new ItemStack(Material.GOLDEN_CHESTPLATE, 1),
+			new ItemStack(Material.GOLDEN_BOOTS, 1),
+			new ItemStack(Material.TURTLE_HELMET, 1),
+			new ItemStack(Material.MUSHROOM_STEW, random.nextInt(3)+2),
+			new ItemStack(Material.TOTEM_OF_UNDYING, random.nextInt(2)),
+		};
+		ItemStack result = lootTable[new Random().nextInt(lootTable.length)];
+		dropLoc.getWorld().dropItem(dropLoc.clone().add(0.5, 1, 0.5), result);
+	}
+	
+	
 	public static void dropBuildItem(Location dropLoc) {
 
 		Random random = new Random();
 		
 		ItemStack[] lootTable = new ItemStack[] {
-				new ItemStack(Material.SLIME_BALL, random.nextInt(3)+1),
-				new ItemStack(Material.REDSTONE, random.nextInt(5)+1),
-				new ItemStack(Material.PINK_WOOL, random.nextInt(4)+1),
-				new ItemStack(Material.LEVER, random.nextInt(2)+1),
-				new ItemStack(Material.REPEATER, random.nextInt(2)+1),
-				new ItemStack(Material.OBSERVER, random.nextInt(2)+1),
-				new ItemStack(Material.DISPENSER, random.nextInt(2)+1),
-				new ItemStack(Material.SCAFFOLDING, random.nextInt(6)+1),
-				new ItemStack(Material.PINK_WOOL, random.nextInt(6)+3),
-				new ItemStack(Material.PINK_WOOL, random.nextInt(6)+3),
-				new ItemStack(Material.PINK_WOOL, random.nextInt(6)+3),
-				new ItemStack(Material.CHICKEN_SPAWN_EGG, random.nextInt(2)+1),
-				new ItemStack(Material.WHEAT_SEEDS, random.nextInt(9)+1),
-				new ItemStack(Material.ENDER_PEARL, 1),
+//				new ItemStack(Material.SLIME_BALL, random.nextInt(3)+1),
+//				new ItemStack(Material.REDSTONE, random.nextInt(5)+1),
+//				new ItemStack(Material.LEVER, random.nextInt(2)+1),
+//				new ItemStack(Material.REPEATER, random.nextInt(2)+1),
+//				new ItemStack(Material.OBSERVER, random.nextInt(2)+1),
+//				new ItemStack(Material.DISPENSER, random.nextInt(2)+1),
+//				new ItemStack(Material.SCAFFOLDING, random.nextInt(6)+1),
+				new ItemStack(Material.PINK_WOOL, random.nextInt(6)+5),new ItemStack(Material.PINK_WOOL, random.nextInt(6)+5),new ItemStack(Material.PINK_WOOL, random.nextInt(6)+5),
+//				new ItemStack(Material.CHICKEN_SPAWN_EGG, random.nextInt(2)+1),
+//				new ItemStack(Material.WHEAT_SEEDS, random.nextInt(9)+1),
+				new ItemStack(Material.ENDER_PEARL, 1),new ItemStack(Material.ENDER_PEARL, 1),
 				new ItemStack(Material.ENCHANTED_GOLDEN_APPLE, 1),
 				new ItemStack(Material.BLAZE_ROD, 1),
 				new ItemStack(Material.SHIELD, 1),
 				new ItemStack(Material.OBSIDIAN, 1),
-				new ItemStack(Material.BELL, random.nextInt(2)+1),
 				new ItemStack(Material.GRAY_WOOL, random.nextInt(20)+10),
-				new ItemStack(Material.DRAGON_HEAD, 1),
-				new ItemStack(Material.DIAMOND, random.nextInt(2)+1),
-				new ItemStack(Material.COBWEB, 1),
+				new ItemStack(Material.DRAGON_HEAD, new Random().nextInt(2)),
+				new ItemStack(Material.DIAMOND, random.nextInt(3)+1),
+				new ItemStack(Material.IRON_INGOT, random.nextInt(5)+2),
 				new ItemStack(Material.CAULDRON, 1),
-				new ItemStack(Material.CHEST, 1),
-				new ItemStack(Material.GOLDEN_APPLE, new Random().nextInt(5)+2),
-				new ItemStack(Material.GOLDEN_APPLE, new Random().nextInt(6)+2),
-				new ItemStack(Material.GOLDEN_APPLE, new Random().nextInt(7)+2),
-				new ItemStack(Material.DIAMOND_SWORD, 1),
-				new ItemStack(Material.SPECTRAL_ARROW, random.nextInt(2)+1),
-				new ItemStack(Material.FEATHER, random.nextInt(2)+1),
-				new ItemStack(Material.FEATHER, random.nextInt(2)+1),
-				new ItemStack(Material.FEATHER, random.nextInt(2)+1),
-				new ItemStack(Material.RAIL, random.nextInt(5)+2),
-				new ItemStack(Material.POWERED_RAIL, random.nextInt(1)+2),
-				new ItemStack(Material.BREAD, random.nextInt(2)+3),
-				new ItemStack(Material.BREAD, random.nextInt(2)+3),
-				new ItemStack(Material.BREAD, random.nextInt(2)+3),
-				new ItemStack(Material.COOKED_BEEF, random.nextInt(3)+2),
-				new ItemStack(Material.COOKED_BEEF, random.nextInt(3)+2),
-				new ItemStack(Material.COOKED_BEEF, random.nextInt(3)+2),
-				new ItemStack(Material.COOKED_CHICKEN, random.nextInt(5)+4),
-				new ItemStack(Material.COOKED_CHICKEN, random.nextInt(5)+4),
-				new ItemStack(Material.COOKED_CHICKEN, random.nextInt(5)+4),
+				new ItemStack(Material.GOLDEN_APPLE, new Random().nextInt(5)+2),new ItemStack(Material.GOLDEN_APPLE, new Random().nextInt(6)+2),new ItemStack(Material.GOLDEN_APPLE, new Random().nextInt(7)+2),
+				new ItemStack(Material.COOKED_BEEF, random.nextInt(3)+2),new ItemStack(Material.COOKED_BEEF, random.nextInt(3)+2),new ItemStack(Material.COOKED_BEEF, random.nextInt(3)+2),
+				new ItemStack(Material.COOKED_CHICKEN, random.nextInt(5)+4),new ItemStack(Material.COOKED_CHICKEN, random.nextInt(5)+4),new ItemStack(Material.COOKED_CHICKEN, random.nextInt(5)+4),
 				new ItemStack(Material.FIRE_CHARGE, 1),
 				new ItemStack(Material.FIRE_CHARGE, random.nextInt(2)+1),
-				new ItemStack(Material.HONEYCOMB, 1),
-				new ItemStack(Material.HONEYCOMB, 1),
-				new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3),
-				new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3),
-				new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3),
-				new ItemStack(Material.NAUTILUS_SHELL, 1),
-				new ItemStack(Material.NAUTILUS_SHELL, 1),
-				new ItemStack(Material.NAUTILUS_SHELL, 1),
-				new ItemStack(Material.NAUTILUS_SHELL, 1),
-				new ItemStack(Material.BEETROOT_SOUP, 1),
-				new ItemStack(Material.BEETROOT_SOUP, 1),
-				new ItemStack(Material.BEETROOT_SOUP, 2),
-				new ItemStack(Material.BEETROOT_SOUP, 2),
-				new ItemStack(Material.MILK_BUCKET, 2),
-				new ItemStack(Material.MILK_BUCKET, 2),
-				new ItemStack(Material.MILK_BUCKET, 2),
+				new ItemStack(Material.HONEYCOMB, 1),new ItemStack(Material.HONEYCOMB, 1),
+				new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3),new ItemStack(Material.BIRCH_LOG, random.nextInt(5)+3),
+				new ItemStack(Material.NAUTILUS_SHELL, 1),new ItemStack(Material.NAUTILUS_SHELL, 1),new ItemStack(Material.NAUTILUS_SHELL, 1),new ItemStack(Material.NAUTILUS_SHELL, 1),
+				new ItemStack(Material.BEETROOT_SOUP, 1),new ItemStack(Material.BEETROOT_SOUP, 1),
+				new ItemStack(Material.MILK_BUCKET, 3),
 				};
 		
 		
@@ -223,8 +210,12 @@ public class FightState extends GameState{
 				}
 				
 				for(Block cb : toReplaceBlocks)
-					if(cb.getType()==Material.AIR || cb.getType()==Material.FIRE)
+					if(cb.getType()==Material.AIR || cb.getType()==Material.FIRE) {
 						cb.setType(Settings.selfRepairBlockMaterial);
+						for(Player cp : Main.getAllPlayers())
+							cp.playSound(cb.getLocation(), Sound.BLOCK_HONEY_BLOCK_STEP, 0.5f, 1);
+					}
+						
 				
 			}
 		}, 1*20, 5*20);
@@ -315,13 +306,11 @@ public class FightState extends GameState{
 
 	@Override
 	public void handleLeave(Player left) {
-		handleTeamPlayerLoss(left);
+		checkTeamLoss();
 		
 	}
 	
-	public void handleTeamPlayerLoss(Player gone) {
-		Bukkit.broadcastMessage(ChatColor.DARK_RED+gone.getName()+" ist ausgeschieden");
-		
+	public void checkTeamLoss() {		
 		
 		//Check if one team has won
 		ArrayList<Team> aliveTeams = new ArrayList<>();
@@ -355,14 +344,41 @@ public class FightState extends GameState{
 			return respawnP;
 	}
 	
+	public Team getRandomEnemyTeam(Team own) {int cntr = 0;
+		Team targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
+		while(targetTeam==own&&cntr++<500)
+			targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
+		return targetTeam;
+	}
 	
-	@EventHandler public void onPlayerRespawn(PlayerRespawnEvent e) {
+	public Player getRandomAlivePlayer(Team targetTeam) {int cntr = 0;
+		Player targetPlayer = targetTeam.getTeamPlayerList().get(new Random().nextInt(targetTeam.getTeamPlayerList().size()));
+		while(getPlayerLeftHP(targetPlayer.getName())<=0&&cntr++<500)
+			targetPlayer = targetTeam.getTeamPlayerList().get(new Random().nextInt(targetTeam.getTeamPlayerList().size()));
+		return targetPlayer;
+	}
+	public ArrayList<Player> getTeamAlivePlayers(Team targetTeam) {
+		ArrayList<Player> players = new ArrayList<>();
+		for(Player cp : targetTeam.getTeamPlayerList())
+			if(getPlayerLeftHP(cp.getName())>0)
+				players.add(cp);
+		return players;
+	}
+	public int getPlayerLeftHP(String playername) {
+		if(playerLives.containsKey(playername))
+			return playerLives.get(playername);
+		return Settings.playerHP;
+	}
+	
+	
+	@EventHandler 
+	public void onPlayerRespawn(PlayerRespawnEvent e) {
 		if(Main.playerBuilding(e.getPlayer())) return;
 		Location respawnLoc = calculatePlayerRespawnPoint(e.getPlayer());
 		Block standon = respawnLoc.getBlock().getRelative(0, -1, 0);
 		if(standon.getType()==Material.AIR) standon.setType(Material.WHITE_WOOL);
 		e.setRespawnLocation(respawnLoc);
-		}
+	}
 	
 	@EventHandler
 	public void onPlayerDie(PlayerDeathEvent e) {
@@ -375,8 +391,6 @@ public class FightState extends GameState{
 			killer.getInventory().addItem(new ItemBuilder(Material.TNT, 1).build());
 		}
 		
-		
-		
 		if(!playerLives.containsKey(p.getName())){
 			playerLives.put(p.getName(), playerStartHP);
 		}
@@ -385,8 +399,11 @@ public class FightState extends GameState{
 		int playerHP = playerLives.get(p.getName());
 		Bukkit.broadcastMessage(ChatColor.RED+p.getName()+" hat noch "+playerHP+" HP...");
 		if(playerHP<=0) {
+			Bukkit.broadcastMessage(ChatColor.DARK_RED+p.getName()+" ist ausgeschieden");
+			for(Player cp : Main.getAllPlayers())
+				cp.playSound(cp.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 0.5f, 1);
 			p.setGameMode(GameMode.SPECTATOR);
-			handleTeamPlayerLoss(p);
+			checkTeamLoss();
 		}else {
 			//p.getWorld().getBlockAt(e.getRespawnLocation().clone().add(0, -5, 0)).setType(Material.PINK_WOOL);
 		}
@@ -415,123 +432,24 @@ public class FightState extends GameState{
 		Player p = e.getPlayer();
 		
 		
-		if(e.getAction()==Action.RIGHT_CLICK_BLOCK)
-		if(e.getClickedBlock().getType()==Material.BOOKSHELF) {
-			if(!blockDelays.containsKey(e.getClickedBlock())) {
-				dropBuildItem(e.getClickedBlock().getLocation().add(0, 1, 0));
-				blockDelays.put(e.getClickedBlock(), 5);
-			}
-		}
-		
-		
-		if(e.getAction()==Action.RIGHT_CLICK_BLOCK||e.getAction()==Action.RIGHT_CLICK_AIR) {
-			if(e.getPlayer().getItemInHand().getType()==Material.FEATHER) {
-				int size = 15;
-				for(int x = -size; x<size;x++) 
-					for(int y = -size; y<size;y++) 
-						for(int z = -size; z<size;z++) {
-							if(e.getPlayer().getWorld().getBlockAt(e.getPlayer().getLocation().add(x, y, z)).getType()==Material.FIRE)
-								e.getPlayer().getWorld().getBlockAt(e.getPlayer().getLocation().add(x, y, z)).setType(Material.GREEN_WOOL);
-						}
-				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
-			}
-			
-			if(e.getPlayer().getWorld().getBlockAt(e.getPlayer().getLocation()).getType() == Material.CAULDRON) {
-				if(e.getPlayer().getItemInHand().getType()==Material.ARROW) {
-					if(e.getPlayer().getFoodLevel()>1) {
-						//e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 1, 100));
-						e.getPlayer().launchProjectile(Arrow.class);
-						if(new Random().nextInt(2)==0)
-							e.getPlayer().setFoodLevel(e.getPlayer().getFoodLevel()-1);
-					}
-					
-				}
-			}
-			
-			if(e.getPlayer().getItemInHand().getType()==Material.HEART_OF_THE_SEA) {
-				
-				Team targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
-				while(targetTeam==TeamManager.getPlayerTeam(p.getName()))
-					targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
-				
-				Player targetPlayer = targetTeam.getTeamPlayerList().get(new Random().nextInt(targetTeam.getTeamPlayerList().size()));
-				while(targetPlayer.getGameMode()!=GameMode.SURVIVAL)
-					targetPlayer = targetTeam.getTeamPlayerList().get(new Random().nextInt(targetTeam.getTeamPlayerList().size()));
-				
-				Location toBomb = targetPlayer.getLocation();
-				
-				for(int i = 0; i<20;i++) {
-					Location in = toBomb.clone().add(new Random().nextInt(10)-5,Settings.maxBuildHeight+30, new Random().nextInt(10)-5);
-					toBomb.getWorld().spawnEntity(in, EntityType.SNOWBALL);
-				}
-				
-				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
-			}
-			
-			if(e.getPlayer().getItemInHand().getType()==Material.HONEYCOMB) {
-				
-				Team targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
-				while(targetTeam==TeamManager.getPlayerTeam(p.getName()))
-					targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
-				
-				for(Player cp: targetTeam.getTeamPlayerList())
-					cp.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 30*20, 1));
-				
-				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
-			}
-			
-			if(e.getPlayer().getItemInHand().getType()==Material.BEETROOT_SOUP) {
-				
-				Team targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
-				while(targetTeam==TeamManager.getPlayerTeam(p.getName()))
-					targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
-				
-				Player targetPlayer = targetTeam.getTeamPlayerList().get(new Random().nextInt(targetTeam.getTeamPlayerList().size()));
-				while(targetPlayer.getGameMode()!=GameMode.SURVIVAL)
-					targetPlayer = targetTeam.getTeamPlayerList().get(new Random().nextInt(targetTeam.getTeamPlayerList().size()));
-				
-				
-				targetPlayer.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 10*20, 1));
-				
-				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
-			}
-			
-			if(e.getPlayer().getItemInHand().getType()==Material.FIRE_CHARGE) {
-				e.getPlayer().launchProjectile(Fireball.class);
-				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
-			}
-			
-			if(e.getPlayer().getItemInHand().getType()==Material.BLAZE_ROD) {
-				int size = 3;
-				for(int x = 0; x<3;x++)
-					for(int z = 0; z<3; z++) {
-						p.getWorld().getBlockAt(p.getLocation().add(x, 0, z).add(-1, -3, -1)).setType(Material.PINK_WOOL);
-					}
-				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
-			}
-			
-			if(e.getPlayer().getItemInHand().getType()==Material.NAUTILUS_SHELL) {
-				Team targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
-				while(targetTeam==TeamManager.getPlayerTeam(p.getName()))
-					targetTeam = Team.values()[new Random().nextInt(Team.values().length)];
-				
-				Player targetPlayer = targetTeam.getTeamPlayerList().get(new Random().nextInt(targetTeam.getTeamPlayerList().size()));
-				while(targetPlayer.getGameMode()!=GameMode.SURVIVAL)
-					targetPlayer = targetTeam.getTeamPlayerList().get(new Random().nextInt(targetTeam.getTeamPlayerList().size()));
-				
-				for(int i = 0; i<5; i++) {
-					targetPlayer.getWorld().spawnEntity(targetPlayer.getLocation().clone().add(0, 10, 0), EntityType.ARROW);
-				}
-				
-				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
-			}
-		}
-		
-		//Pull items from tnt
-		if(e.getAction()==Action.RIGHT_CLICK_BLOCK)
-			if(e.getClickedBlock().getType()==Material.TNT) {
+		if(e.getAction()==Action.RIGHT_CLICK_BLOCK) {
+			if(e.getClickedBlock().getType()==Material.TARGET) {
 				if(!blockDelays.containsKey(e.getClickedBlock())) {
-					
+					p.playSound(p.getLocation(), Sound.BLOCK_COMPARATOR_CLICK, 0.3f, 1);
+					dropHealItem(e.getClickedBlock().getLocation().add(0, 1, 0));
+					blockDelays.put(e.getClickedBlock(), 30);
+				}
+			}
+			else if(e.getClickedBlock().getType()==Material.BOOKSHELF) {
+				if(!blockDelays.containsKey(e.getClickedBlock())) {
+					p.playSound(p.getLocation(), Sound.BLOCK_COMPARATOR_CLICK, 0.3f, 1);
+					dropBuildItem(e.getClickedBlock().getLocation().add(0, 1, 0));
+					blockDelays.put(e.getClickedBlock(), 10);
+				}
+			}
+			else if(e.getClickedBlock().getType()==Material.TNT) {
+				if(!blockDelays.containsKey(e.getClickedBlock())) {
+					p.playSound(p.getLocation(), Sound.BLOCK_COMPARATOR_CLICK, 0.3f, 1);
 					int choice = new Random().nextInt(5);
 					
 					ItemStack result = new ItemStack(Material.CAKE, 1);
@@ -543,7 +461,7 @@ public class FightState extends GameState{
 							result = new ItemStack(Material.SNOWBALL, 1);
 					if(choice==1)
 						if(new Random().nextInt(5)!=0)
-							result = new ItemStack(Material.EGG, 1);
+							result = new ItemStack(Material.EGG, new Random().nextInt(2)+1);
 						else
 							result = new ItemStack(Material.TNT, 1);
 					if(choice==2)
@@ -563,8 +481,85 @@ public class FightState extends GameState{
 					
 					blockDelays.put(e.getClickedBlock(), 15);
 				}
-			
 			}
+		}
+			
+		
+		
+		if(e.getAction()==Action.RIGHT_CLICK_BLOCK||e.getAction()==Action.RIGHT_CLICK_AIR) {
+			if(e.getPlayer().getItemInHand().getType()==Material.FEATHER) {
+				int size = 15;
+				for(int x = -size; x<size;x++) 
+					for(int y = -size; y<size;y++) 
+						for(int z = -size; z<size;z++) {
+							if(e.getPlayer().getWorld().getBlockAt(e.getPlayer().getLocation().add(x, y, z)).getType()==Material.FIRE)
+								e.getPlayer().getWorld().getBlockAt(e.getPlayer().getLocation().add(x, y, z)).setType(Material.GREEN_WOOL);
+						}
+				for(Player cp : Main.getAllPlayers())
+					cp.playSound(p.getLocation(), Sound.ITEM_BUCKET_EMPTY, 0.7f, 1);
+				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
+			}
+			
+			if(e.getPlayer().getWorld().getBlockAt(e.getPlayer().getLocation()).getType() == Material.CAULDRON) {
+				if(e.getPlayer().getItemInHand().getType()==Material.ARROW) {
+					if(e.getPlayer().getFoodLevel()>1) {
+						//e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 1, 100));
+						e.getPlayer().launchProjectile(Arrow.class);
+						if(new Random().nextInt(2)==0)
+							e.getPlayer().setFoodLevel(e.getPlayer().getFoodLevel()-1);
+					}
+				}
+			}
+			if(e.getPlayer().getItemInHand().getType()==Material.MUSHROOM_STEW) {
+				if(p.getHealth()+2<p.getMaxHealth()) {
+					p.setHealth(p.getHealth()+2);
+					p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_BURP, 0.3f, 1);
+					e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
+				}
+			}
+			if(e.getPlayer().getItemInHand().getType()==Material.HEART_OF_THE_SEA) {
+				Location toBomb = getRandomAlivePlayer(getRandomEnemyTeam(TeamManager.getPlayerTeam(p.getName()))).getLocation();
+				for(int i = 0; i<20;i++) {
+					Location in = toBomb.clone().add(new Random().nextInt(10)-5,Settings.maxBuildHeight+30, new Random().nextInt(10)-5);
+					toBomb.getWorld().spawnEntity(in, EntityType.SNOWBALL);
+				}
+				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
+			}
+			
+			if(e.getPlayer().getItemInHand().getType()==Material.HONEYCOMB) {
+				for(Player cp: getTeamAlivePlayers(getRandomEnemyTeam(TeamManager.getPlayerTeam(p.getName()))))
+					cp.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 30*20, 1));
+				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
+			}
+			
+			if(e.getPlayer().getItemInHand().getType()==Material.BEETROOT_SOUP) {
+				getRandomAlivePlayer(getRandomEnemyTeam(TeamManager.getPlayerTeam(p.getName()))).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 15*20, 1));
+				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
+			}
+			
+			if(e.getPlayer().getItemInHand().getType()==Material.FIRE_CHARGE) {
+				e.getPlayer().launchProjectile(Fireball.class);
+				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
+			}
+			
+			if(e.getPlayer().getItemInHand().getType()==Material.BLAZE_ROD) {
+				int size = 3;
+				for(int x = 0; x<3;x++)
+					for(int z = 0; z<3; z++) {
+						Block currentBlock = p.getWorld().getBlockAt(p.getLocation().add(x, 0, z).add(-1, -3, -1));
+						currentBlock.setType(Material.PINK_WOOL);
+						toSelfRepairBlocks.add(currentBlock);
+					}
+				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
+			}
+			
+			if(e.getPlayer().getItemInHand().getType()==Material.NAUTILUS_SHELL) {
+				Player targetPlayer = getRandomAlivePlayer(getRandomEnemyTeam(TeamManager.getPlayerTeam(p.getName())));
+				for(int i = 0; i<5; i++) 
+					targetPlayer.getWorld().spawnEntity(targetPlayer.getLocation().clone().add(0, 10+new Random().nextInt(10), 0), EntityType.ARROW);
+				e.getPlayer().getItemInHand().setAmount(e.getPlayer().getItemInHand().getAmount()-1);
+			}
+		}
 		
 	}
 	
@@ -586,7 +581,7 @@ public class FightState extends GameState{
 		if(e.getBlock().getLocation().getBlockX()>Settings.maxBuildWidth||e.getBlock().getLocation().getBlockX()<-Settings.maxBuildWidth)
 			e.setCancelled(true);
 		
-		if(e.getBlock().getLocation().getBlockY()>Settings.maxBuildHeight) {
+		if(e.getBlock().getLocation().getBlockY()>Settings.maxBuildHeight+3) {
 			e.setCancelled(true);
 			p.sendMessage("Hör auf Skybases zu Bauen, du Scheißkind!");
 		}
@@ -626,14 +621,18 @@ public class FightState extends GameState{
 				projectile.getWorld().strikeLightning(projectile.getLocation());
 			
 			if(projectile.getType().equals(EntityType.EGG))
-				if(e.getHitBlock()!=null)
+				if(e.getHitBlock()!=null) {
 					e.getHitBlock().setType(Material.FIRE);
+					for(Player cp : Main.getAllPlayers())
+						cp.playSound(projectile.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 0.9f, 1);
+				}
+					
 			
 			if(projectile.getType().equals(EntityType.FIREBALL))
 				if(e.getHitBlock()!=null){
 					Blaze blaze = (Blaze)e.getHitBlock().getWorld().spawnEntity(e.getHitBlock().getLocation(), EntityType.BLAZE);
 					blaze.setGlowing(true);
-					blaze.setHealth(1);
+					blaze.setHealth(4);
 				}
 			
 			if(projectile.getType().equals(EntityType.ARROW)) {
@@ -643,11 +642,19 @@ public class FightState extends GameState{
 						e.getHitBlock().getWorld().createExplosion(projectile.getLocation(), 10, true);
 					}
 						
-					if(new Random().nextInt(5)==0)
+					if(new Random().nextInt(5)==0) {
+						for(Player cp : Main.getAllPlayers())
+							cp.playSound(projectile.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 0.9f, 1);
 						e.getHitBlock().setType(Material.FIRE);
-					else if(new Random().nextInt(2)==0)
+					}
+					else if(new Random().nextInt(2)==0) {
 						e.getHitBlock().setType(Material.AIR);
-				}	
+						for(Player cp : Main.getAllPlayers())
+							cp.playSound(projectile.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 0.8f, 1);
+					}
+					for(Player cp : Main.getAllPlayers())
+						cp.playSound(projectile.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR, 0.5f, 1);
+				}
 			}
 			if(projectile.getType().equals(EntityType.ENDER_PEARL)) {
 				if(e.getHitBlock()!=null) {
