@@ -1,5 +1,5 @@
 # FireFight
-The second version of my own Minecraft minigame. 
+The second version of my own Minecraft minigame.
 
 ## How to play
 - Use the BaseManager(Bricks) to join one of your buildworlds.
@@ -23,6 +23,7 @@ The second version of my own Minecraft minigame.
 - Nautilus Shell: Arrow over random enemy
 - Honeycomb: Make all enemies glow for 30 seconds
 - Blaze rod: Sets pink wool under you
+- Beetrot soup: gives nausea to a random enemy
 
 #### Blocks:
 - Pink wool: regenerates itself ever few seconds when Blocks are near
