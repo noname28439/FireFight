@@ -33,7 +33,8 @@ public class OverwriteCMD implements CommandExecutor {
 		
 		String worldname = p.getWorld().getName();
 		File worldFolder = p.getWorld().getWorldFolder();
-		Main.LOBBY_STATE.handleJoin(p);
+		for(Player cp : p.getWorld().getPlayers())
+			Main.LOBBY_STATE.handleJoin(cp);
 		Bukkit.unloadWorld(worldname, false);
 		System.out.println("Worlddelete "+worldname+" --> "+deleteDirectory(worldFolder));
 		int bpid = Integer.valueOf(worldname.split("\\.")[3]);

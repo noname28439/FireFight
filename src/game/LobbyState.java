@@ -77,6 +77,8 @@ public class LobbyState extends GameState{
 		
 		joined.getInventory().clear();
 		joined.setGameMode(GameMode.ADVENTURE);
+		joined.setHealth(joined.getMaxHealth());
+		joined.setFoodLevel(20);
 		joined.teleport(Settings.spawn);
 		joined.getInventory().setItem(4, new ItemBuilder(Material.COMPASS, 1).setDisplayname(ChatColor.GOLD+"TeamSelector").build());
 		joined.getInventory().setItem(2, new ItemBuilder(Material.BRICKS, 1).setDisplayname(ChatColor.GOLD+"BaseManager").build());

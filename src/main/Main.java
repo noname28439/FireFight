@@ -21,6 +21,7 @@ import commands.SetGameTimeCMD;
 import commands.SpawnCMD;
 import commands.SpectateCMD;
 import commands.TestCMD;
+import commands.ViewCMD;
 import game.FightState;
 import game.GameState;
 import game.GameStateManager;
@@ -96,6 +97,7 @@ public class Main extends JavaPlugin{
 		getCommand("overwrite").setExecutor(new OverwriteCMD());
 		getCommand("setgametime").setExecutor(new SetGameTimeCMD());
 		getCommand("edit").setExecutor(new EditCMD());
+		getCommand("view").setExecutor(new ViewCMD());
 		
 		
 		//Adding Listeners

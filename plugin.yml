@@ -12,3 +12,4 @@ commands:
    overwrite:
    setgametime:
    edit:
+   view:

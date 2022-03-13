@@ -658,14 +658,23 @@ public class FightState extends GameState{
 			}
 			if(projectile.getType().equals(EntityType.ENDER_PEARL)) {
 				if(e.getHitBlock()!=null) {
-					if(e.getHitBlock().getType()==Settings.selfRepairBlockMaterial) {
-						e.getHitBlock().setType(Material.ACACIA_LEAVES);
+					
+						int size = 2;
+						for(int x = -size; x<size;x++) 
+							for(int y = -size; y<size;y++) 
+								for(int z = -size; z<size;z++) {
+									Block cb = e.getHitBlock().getRelative(x, y, z);
+									if(cb.getType()==Settings.selfRepairBlockMaterial)
+										if(toSelfRepairBlocks.contains(cb)) {
+											toSelfRepairBlocks.remove(cb);
+											cb.setType(Material.ACACIA_LEAVES);
+										}
+								}
+						
 						for(Player cp : Main.getAllPlayers())
 							cp.playSound(projectile.getLocation(), Sound.ENTITY_VILLAGER_HURT, 15, 1);
-						if(e.getHitBlock().getType()==Settings.selfRepairBlockMaterial)
-							if(toSelfRepairBlocks.contains(e.getHitBlock()))
-								toSelfRepairBlocks.remove(e.getHitBlock());
-					}
+						
+					
 				}
 			}
 			e.getEntity().remove();
