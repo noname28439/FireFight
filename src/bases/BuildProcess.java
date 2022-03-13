@@ -69,7 +69,7 @@ public class BuildProcess {
 	}
 	
 	void setupPlayer(Player toSetup){
-		toSetup.teleport(new Location(buildWorld, 0.5, 10, -19.5));
+		toSetup.teleport(new Location(buildWorld, 0.5, 100, -19.5));
 		toSetup.setGameMode(GameMode.SURVIVAL);
 		toSetup.setAllowFlight(true);
 		

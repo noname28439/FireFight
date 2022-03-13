@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -154,7 +155,7 @@ public class BaseManager implements Listener{
 		if(!p.getWorld().getName().startsWith("BaseBlueprint")) return;
 		
 		
-		if(e.getBlock().getLocation().getBlockZ()<10&&e.getBlock().getLocation().getBlockZ()>-10)
+		if(e.getBlock().getLocation().getBlockZ()>-10)
 			e.setCancelled(true);
 		if(e.getBlock().getLocation().getBlockZ()<-Settings.maxBuildDepth)
 			e.setCancelled(true);
@@ -165,5 +166,52 @@ public class BaseManager implements Listener{
 			e.setCancelled(true);
 			p.sendMessage("Hör auf Skybases zu Bauen, du Scheißkind!");
 		}
+	}
+	
+	@EventHandler
+	public void onBlockbreakClick(PlayerInteractEvent e) {
+		Player p = e.getPlayer();
+		if(!p.getWorld().getName().startsWith("BaseBlueprint")) return;
+		if(!Main.playerBuilding(p)) return;
+		if(e.getClickedBlock()==null) return;
+		if(e.getItem()==null) return;
+		
+		//check if block is out of buildrange
+		if(e.getClickedBlock().getLocation().getBlockZ()>-10)
+			e.setCancelled(true);
+		if(e.getClickedBlock().getLocation().getBlockZ()<-Settings.maxBuildDepth)
+			e.setCancelled(true);
+		if(e.getClickedBlock().getLocation().getBlockX()>Settings.maxBuildWidth||e.getClickedBlock().getLocation().getBlockX()<-Settings.maxBuildWidth)
+			e.setCancelled(true);
+		
+		if(e.getClickedBlock().getLocation().getBlockY()>Settings.maxBuildHeight) {
+			e.setCancelled(true);
+		}
+		
+		if(e.getAction()==Action.LEFT_CLICK_BLOCK)
+			if(e.getItem().getType()==Material.NETHER_STAR && !e.isCancelled()) {
+				for(ItemStack cis: e.getClickedBlock().getDrops())
+					p.getInventory().addItem(cis);
+				e.getClickedBlock().setType(Material.AIR);
+			}
+	}
+	
+	@EventHandler
+	public void onBlockBreak(BlockBreakEvent e) {
+		Player p = e.getPlayer();
+		if(!p.getWorld().getName().startsWith("BaseBlueprint")) return;
+		
+		if(e.getBlock().getLocation().getBlockZ()>-10)
+			e.setCancelled(true);
+		if(e.getBlock().getLocation().getBlockZ()<-Settings.maxBuildDepth)
+			e.setCancelled(true);
+		if(e.getBlock().getLocation().getBlockX()>Settings.maxBuildWidth||e.getBlock().getLocation().getBlockX()<-Settings.maxBuildWidth)
+			e.setCancelled(true);
+		
+		if(e.getBlock().getLocation().getBlockY()>Settings.maxBuildHeight) {
+			e.setCancelled(true);
+		}
+		
+
 	}
 }

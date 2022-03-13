@@ -56,50 +56,48 @@ public class MainListener implements Listener {
 		Player p = e.getPlayer();
 		
 		
-		
-		
-		if(p.getInventory().getItemInMainHand()!=null) {
-			if(!playerBuildStartPoints.containsKey(p))
-				playerBuildStartPoints.put(p, null);
-			if(!playerBuildEndPoints.containsKey(p))
-				playerBuildEndPoints.put(p, null);
-			
-			ItemStack inHand = p.getInventory().getItemInMainHand();
-			
-			if(inHand.getType()==Material.NETHER_STAR) {
-				e.setCancelled(true);
-				if(e.getAction()==Action.RIGHT_CLICK_AIR)
-					playerBuildStartPoints.put(p, p.getLocation());
-				else if(e.getAction()==Action.RIGHT_CLICK_BLOCK)
-					playerBuildStartPoints.put(p, e.getClickedBlock().getLocation());
-				
-				if(e.getAction()==Action.LEFT_CLICK_AIR)
-					playerBuildEndPoints.put(p, p.getLocation());
-				else if(e.getAction()==Action.LEFT_CLICK_BLOCK)
-					playerBuildEndPoints.put(p, e.getClickedBlock().getLocation());
-			
-				if(playerBuildEndPoints.get(p)!=null)
-					p.getWorld().spawnParticle(Particle.HEART, playerBuildEndPoints.get(p), 0);
-				if(playerBuildStartPoints.get(p)!=null)
-					p.getWorld().spawnParticle(Particle.HEART, playerBuildStartPoints.get(p), 0);
-				
-				
-					if(playerBuildStartPoints.get(p)!=null)
-						if(playerBuildStartPoints.get(p).getY()>Settings.maxBuildHeight) {
-							Location newPos = playerBuildStartPoints.get(p);
-							newPos.setY(Settings.maxBuildHeight);
-							playerBuildStartPoints.put(p, newPos);
-						}
-					if(playerBuildEndPoints.get(p)!=null)
-						if(playerBuildEndPoints.get(p).getY()>Settings.maxBuildHeight) {
-							Location newPos = playerBuildEndPoints.get(p);
-							newPos.setY(Settings.maxBuildHeight);
-							playerBuildEndPoints.put(p, newPos);
-						}
-					InGameBuildTools.markArea(p, MainListener.playerBuildStartPoints.get(p), MainListener.playerBuildEndPoints.get(p), 3);
-			}
-			
-		}	
+//		if(p.getInventory().getItemInMainHand()!=null) {
+//			if(!playerBuildStartPoints.containsKey(p))
+//				playerBuildStartPoints.put(p, null);
+//			if(!playerBuildEndPoints.containsKey(p))
+//				playerBuildEndPoints.put(p, null);
+//			
+//			ItemStack inHand = p.getInventory().getItemInMainHand();
+//			
+//			if(inHand.getType()==Material.NETHER_STAR) {
+//				e.setCancelled(true);
+//				if(e.getAction()==Action.RIGHT_CLICK_AIR)
+//					playerBuildStartPoints.put(p, p.getLocation());
+//				else if(e.getAction()==Action.RIGHT_CLICK_BLOCK)
+//					playerBuildStartPoints.put(p, e.getClickedBlock().getLocation());
+//				
+//				if(e.getAction()==Action.LEFT_CLICK_AIR)
+//					playerBuildEndPoints.put(p, p.getLocation());
+//				else if(e.getAction()==Action.LEFT_CLICK_BLOCK)
+//					playerBuildEndPoints.put(p, e.getClickedBlock().getLocation());
+//			
+//				if(playerBuildEndPoints.get(p)!=null)
+//					p.getWorld().spawnParticle(Particle.HEART, playerBuildEndPoints.get(p), 0);
+//				if(playerBuildStartPoints.get(p)!=null)
+//					p.getWorld().spawnParticle(Particle.HEART, playerBuildStartPoints.get(p), 0);
+//				
+//				
+//					if(playerBuildStartPoints.get(p)!=null)
+//						if(playerBuildStartPoints.get(p).getY()>Settings.maxBuildHeight) {
+//							Location newPos = playerBuildStartPoints.get(p);
+//							newPos.setY(Settings.maxBuildHeight);
+//							playerBuildStartPoints.put(p, newPos);
+//						}
+//					if(playerBuildEndPoints.get(p)!=null)
+//						if(playerBuildEndPoints.get(p).getY()>Settings.maxBuildHeight) {
+//							Location newPos = playerBuildEndPoints.get(p);
+//							newPos.setY(Settings.maxBuildHeight);
+//							playerBuildEndPoints.put(p, newPos);
+//						}
+//					InGameBuildTools.markArea(p, MainListener.playerBuildStartPoints.get(p), MainListener.playerBuildEndPoints.get(p), 3);
+//			}
+//			
+//		}
 	}
 	
 }
