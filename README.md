@@ -14,8 +14,8 @@ The second version of my own Minecraft minigame.
 - Trident: Explosion
 - Egg: Fire
 - Snowball: Lightning strike
-- Ender Pearl: Destroy self repairing blocks in a tow block radius
-- Fireball: Spawns a blaze
+- Fireball: Destroy self repairing blocks in a tow block radius
+- Ender Pearl: Spawns a blaze
 
 #### Usable:
 - Feahter: Extinguish fire in a 15 blocks radius

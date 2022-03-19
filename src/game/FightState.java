@@ -162,10 +162,8 @@ public class FightState extends GameState{
 		for(int x = -Settings.maxBuildWidth-2; x<Settings.maxBuildWidth+2; x++)
 			for(int y = 0; y<=Settings.maxBuildHeight; y++)
 				for(int z = -Settings.maxBuildDepth; z<=-10; z++) {
-					
 					loadWorldBlock(x, y, z, base1world, gameworld, false);
 					loadWorldBlock(x, y, z, base2world, gameworld, true);
-					
 				}
 		
 		for(Player cp : Bukkit.getOnlinePlayers()) setupPlayer(cp);
@@ -185,9 +183,6 @@ public class FightState extends GameState{
 					}
 					for(Block key : toRem)
 						blockDelays.remove(key);
-					
-					
-				
 				}
 			}, 1*20, 1*20);
 		RepairTickerID = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, new Runnable() {
@@ -235,7 +230,6 @@ public class FightState extends GameState{
 		try {
 			BlockData bd = original.getState().getBlockData();
 			if(invert) {
-				System.out.println("invrtin "+Main.locationToString(ct));
 				if(bd instanceof Directional) {
 					Directional dir = (Directional) bd;
 					if(dir.getFacing() == BlockFace.NORTH || dir.getFacing() == BlockFace.SOUTH)
@@ -455,7 +449,7 @@ public class FightState extends GameState{
 					ItemStack result = new ItemStack(Material.CAKE, 1);
 					
 					if(choice==0)
-						if(new Random().nextInt(2)!=0)
+						if(new Random().nextInt(4)==0)
 							result = new ItemStack(Material.TRIDENT, 1);
 						else
 							result = new ItemStack(Material.SNOWBALL, 1);
@@ -466,7 +460,7 @@ public class FightState extends GameState{
 							result = new ItemStack(Material.TNT, 1);
 					if(choice==2)
 						if(new Random().nextInt(2)!=0)
-							result = new ItemStack(Material.FEATHER, 1);
+							result = new ItemStack(Material.FEATHER, new Random().nextInt(2)+1);
 						else
 							result = new ItemStack(Material.BOOKSHELF, 1);
 					if(choice==3)
@@ -628,7 +622,7 @@ public class FightState extends GameState{
 				}
 					
 			
-			if(projectile.getType().equals(EntityType.FIREBALL))
+			if(projectile.getType().equals(EntityType.ENDER_PEARL))
 				if(e.getHitBlock()!=null){
 					Blaze blaze = (Blaze)e.getHitBlock().getWorld().spawnEntity(e.getHitBlock().getLocation(), EntityType.BLAZE);
 					blaze.setGlowing(true);
@@ -656,7 +650,7 @@ public class FightState extends GameState{
 						cp.playSound(projectile.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR, 0.5f, 1);
 				}
 			}
-			if(projectile.getType().equals(EntityType.ENDER_PEARL)) {
+			if(projectile.getType().equals(EntityType.FIREBALL)) {
 				if(e.getHitBlock()!=null) {
 					
 						int size = 2;
