@@ -14,12 +14,12 @@ The second version of my own Minecraft minigame.
 - Trident: Explosion
 - Egg: Fire
 - Snowball: Lightning strike
-- Fireball: Destroy self repairing blocks in a tow block radius
+- Fireball: Destroy self repairing blocks in a two block radius
 - Ender Pearl: Spawns a blaze
 
 #### Usable:
 - Feahter: Extinguish fire in a 15 blocks radius
-- Hearth of the Sea: Snowrain over random enemy
+- Heart of the Sea: Snowrain over random enemy
 - Nautilus Shell: Arrow over random enemy
 - Honeycomb: Make all enemies glow for 30 seconds
 - Blaze rod: Sets pink wool under you
