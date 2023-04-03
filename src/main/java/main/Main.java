@@ -28,6 +28,7 @@ import game.GameStateManager;
 import game.LobbyState;
 import game.MainListener;
 import teams.TeamManager;
+import util.DBHandler;
 
 public class Main extends JavaPlugin{
 	
@@ -85,10 +86,11 @@ public class Main extends JavaPlugin{
 	
 	@Override
 	public void onEnable() {
-		
+
 		plugin = this;
-		
-		//Adding Commmands
+
+		DBHandler.load();
+
 		getCommand("test").setExecutor(new TestCMD());
 		getCommand("spectate").setExecutor(new SpectateCMD());
 		getCommand("build").setExecutor(new BuildCMD());
@@ -100,7 +102,6 @@ public class Main extends JavaPlugin{
 		getCommand("view").setExecutor(new ViewCMD());
 		
 		
-		//Adding Listeners
 		pm = Bukkit.getPluginManager();
 		pm.registerEvents(new TeamManager(), this);
 		pm.registerEvents(new BaseManager(), this);
@@ -109,6 +110,12 @@ public class Main extends JavaPlugin{
 		main();
 		
 		
+	}
+
+	@Override
+	public void onDisable() {
+		DBHandler.unload();
+		saveConfig();
 	}
 	
 	public static void main() {

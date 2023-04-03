@@ -17,13 +17,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import game.GameStateManager;
 import main.Main;
 import net.md_5.bungee.api.ChatColor;
+import util.DBHandler;
 
 public class TeamManager implements Listener{
 
 	
 	public static final int MAX_BALANCE_OFFSET = 10;
 	
-	public static String teamSelectionInventoryTitle = "�6�l<--Teamauswahl-->";
+	public static String teamSelectionInventoryTitle = "§6§lTeamauswahl";
 	
 	public static Team getTeamByButtonMaterial(Material buttonMaterial) {
 		for(Team t : Team.values())
@@ -55,19 +56,22 @@ public class TeamManager implements Listener{
 		
 		if(Bukkit.getPlayer(playername)==null) return; //Player cant be found
 		Player player = Bukkit.getPlayer(playername);
-		if(team!=null) {
-			player.setDisplayName(team.getChatColor()+player.getName()+ChatColor.RESET);
-			player.setPlayerListName(team.getChatColor()+player.getName()+ChatColor.RESET);
-			player.sendMessage("Du bist jetzt in Team "+team.getChatColor()+team.getTeamName());
-		}else {
-			player.setDisplayName(ChatColor.RESET+player.getName()+ChatColor.RESET);
-			player.setPlayerListName(ChatColor.RESET+player.getName()+ChatColor.RESET);
-			player.sendMessage("Du bist jetzt in keinem Team mehr");
-		}
+		setupPlayerName(player);
 		
 	}
 	
-	
+	public static void setupPlayerName(Player p){
+		Float damage = 0f;
+		boolean participant = true;
+		Team team = getPlayerTeam(p.getName());
+		if(damage == null) damage = 0f;
+		damage = (int)(damage*100f)/100f;
+		String formattedName = (team==null?org.bukkit.ChatColor.DARK_AQUA:team.getChatColor())+"["+ DBHandler.teamNameByUserName(p.getName())+"] "+
+				(participant? org.bukkit.ChatColor.GOLD: org.bukkit.ChatColor.DARK_GRAY)
+				+p.getName()+ org.bukkit.ChatColor.RESET;
+		p.setPlayerListName(formattedName);
+		p.setDisplayName(formattedName);
+	}
 	
 	
 	public static Inventory getSelectionInventory() {

@@ -18,7 +18,4 @@ public class GameStateManager {
 		if(currentGameState!=null) currentGameState.start();
 		System.out.println("Switched GameState to "+currentGameState.getClass().getName());
 	}
-	
-	
-	
 }

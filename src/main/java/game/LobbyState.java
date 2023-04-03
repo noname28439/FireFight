@@ -143,7 +143,7 @@ public class LobbyState extends GameState{
 			
 			
 			if(TeamManager.getPlayerTeam(p.getName())==null) {
-				p.sendMessage(ChatColor.RED+"Du musst ein Team ausgew�hlt haben!");
+				p.sendMessage(ChatColor.RED+"Du musst ein Team ausgewählt haben!");
 				return;
 			}else {
 				if(TeamManager.getPlayerTeam(p.getName())==Team.BLUE) {
@@ -152,7 +152,7 @@ public class LobbyState extends GameState{
 					Main.base2worldname = worldname;
 				}
 			}
-			p.sendMessage(ChatColor.GREEN+clicked.getItemMeta().getDisplayName()+" erfolgreich als Base f�r Team "+TeamManager.getPlayerTeam(p.getName()).getTeamName()+" festgelegt!");
+				p.sendMessage(ChatColor.GREEN+clicked.getItemMeta().getDisplayName()+" erfolgreich als Base für Team "+TeamManager.getPlayerTeam(p.getName()).getTeamName()+" festgelegt!");
 			p.closeInventory();
 			
 		}

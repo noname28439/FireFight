@@ -160,7 +160,7 @@ public class BaseManager implements Listener{
 		
 		if(e.getBlock().getLocation().getBlockY()>Settings.maxBuildHeight) {
 			e.setCancelled(true);
-			p.sendMessage("H�r auf Skybases zu Bauen, du Schei�kind!");
+			p.sendMessage("Hör auf Skybases zu Bauen, du Scheißkind!");
 		}
 	}
 	

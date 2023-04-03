@@ -575,7 +575,7 @@ public class FightState extends GameState{
 		
 		if(e.getBlock().getLocation().getBlockY()>Settings.maxBuildHeight+3) {
 			e.setCancelled(true);
-			p.sendMessage("H�r auf Skybases zu Bauen, du Schei�kind!");
+			p.sendMessage("Hßr auf Skybases zu Bauen, du Scheißkind!");
 		}
 		
 		if(Main.playerBuilding(e.getPlayer())) return;
