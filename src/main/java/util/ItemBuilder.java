@@ -48,7 +48,7 @@ public class ItemBuilder {
     }
 
     public ItemBuilder setNoName() {
-        setDisplayname("ง8");
+        setDisplayname("ยง8");
         return this;
     }
 
