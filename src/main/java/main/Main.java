@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 
+import commands.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -13,15 +14,6 @@ import org.bukkit.scoreboard.Scoreboard;
 
 import bases.BaseManager;
 import bases.BuildProcess;
-import commands.BuildCMD;
-import commands.EditCMD;
-import commands.JoinCMD;
-import commands.OverwriteCMD;
-import commands.SetGameTimeCMD;
-import commands.SpawnCMD;
-import commands.SpectateCMD;
-import commands.TestCMD;
-import commands.ViewCMD;
 import game.FightState;
 import game.GameState;
 import game.GameStateManager;
@@ -98,6 +90,7 @@ public class Main extends JavaPlugin{
 		getCommand("setgametime").setExecutor(new SetGameTimeCMD());
 		getCommand("edit").setExecutor(new EditCMD());
 		getCommand("view").setExecutor(new ViewCMD());
+		getCommand("setplayerteam").setExecutor(new SetPlayerTeamCmd());
 		
 		
 		//Adding Listeners

@@ -23,7 +23,7 @@ public class TeamManager implements Listener{
 	
 	public static final int MAX_BALANCE_OFFSET = 10;
 	
-	public static String teamSelectionInventoryTitle = "�6�l<--Teamauswahl-->";
+	public static String teamSelectionInventoryTitle = "Teamauswahl";
 	
 	public static Team getTeamByButtonMaterial(Material buttonMaterial) {
 		for(Team t : Team.values())

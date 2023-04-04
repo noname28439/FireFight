@@ -15,7 +15,7 @@ public class SetGameTimeCMD implements CommandExecutor {
 		Player p = (Player) arg0;
 		
 		if(!p.isOp()) {
-			p.sendMessage(ChatColor.RED+"Du darfst diesen Befehl nicht ausführen!");
+			p.sendMessage(ChatColor.RED+"Du darfst diesen Befehl nicht ausfÃ¼hren!");
 			return false;
 		}
 		
