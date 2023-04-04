@@ -13,3 +13,4 @@ commands:
   setgametime:
   edit:
   view:
+  setplayerteam:
