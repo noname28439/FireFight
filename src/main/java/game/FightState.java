@@ -83,16 +83,7 @@ public class FightState extends GameState{
 		Random random = new Random();
 		
 		ItemStack[] lootTable = new ItemStack[] {
-//				new ItemStack(Material.SLIME_BALL, random.nextInt(3)+1),
-//				new ItemStack(Material.REDSTONE, random.nextInt(5)+1),
-//				new ItemStack(Material.LEVER, random.nextInt(2)+1),
-//				new ItemStack(Material.REPEATER, random.nextInt(2)+1),
-//				new ItemStack(Material.OBSERVER, random.nextInt(2)+1),
-//				new ItemStack(Material.DISPENSER, random.nextInt(2)+1),
-//				new ItemStack(Material.SCAFFOLDING, random.nextInt(6)+1),
 				new ItemStack(Material.PINK_WOOL, random.nextInt(6)+5),new ItemStack(Material.PINK_WOOL, random.nextInt(6)+5),new ItemStack(Material.PINK_WOOL, random.nextInt(6)+5),
-//				new ItemStack(Material.CHICKEN_SPAWN_EGG, random.nextInt(2)+1),
-//				new ItemStack(Material.WHEAT_SEEDS, random.nextInt(9)+1),
 				new ItemStack(Material.ENDER_PEARL, 1),new ItemStack(Material.ENDER_PEARL, 1),
 				new ItemStack(Material.ENCHANTED_GOLDEN_APPLE, 1),
 				new ItemStack(Material.BLAZE_ROD, 1),
@@ -113,6 +104,8 @@ public class FightState extends GameState{
 				new ItemStack(Material.NAUTILUS_SHELL, 1),new ItemStack(Material.NAUTILUS_SHELL, 1),new ItemStack(Material.NAUTILUS_SHELL, 1),new ItemStack(Material.NAUTILUS_SHELL, 1),
 				new ItemStack(Material.BEETROOT_SOUP, 1),new ItemStack(Material.BEETROOT_SOUP, 1),
 				new ItemStack(Material.MILK_BUCKET, 3),
+				new ItemStack(Material.MAGENTA_WOOL, new Random().nextInt(1)+1),
+				new ItemStack(Material.LIME_WOOL, new Random().nextInt(1)+1),
 				};
 		
 		
@@ -575,12 +568,26 @@ public class FightState extends GameState{
 		
 		if(e.getBlock().getLocation().getBlockY()>Settings.maxBuildHeight+3) {
 			e.setCancelled(true);
-			p.sendMessage("Hßr auf Skybases zu Bauen, du Scheißkind!");
+
+			p.sendMessage("Hör auf Skybases zu Bauen, du Scheißkind!");
 		}
 		
 		if(Main.playerBuilding(e.getPlayer())) return;
 		if(e.getBlock().getType()==Settings.selfRepairBlockMaterial && !e.isCancelled()) {
 			toSelfRepairBlocks.add(e.getBlock());
+		}
+
+		if(e.getBlock().getType()==Material.MAGENTA_WOOL){
+			e.getBlock().setType(Material.OBSIDIAN);
+			for(int i = 0; i<4; i++){
+				e.getBlock().getWorld().spawnFallingBlock(e.getBlock().getLocation().clone().add(0.5, 30+i*2, 0.5), Material.SAND.createBlockData());
+			}
+		}
+		if(e.getBlock().getType()==Material.LIME_WOOL){
+			e.getBlock().setType(Material.OBSIDIAN);
+			for(int i = 0; i<5; i++){
+				e.getBlock().getWorld().spawnFallingBlock(e.getBlock().getLocation().clone().add(0.5, 30+i*2, 0.5), Material.GLASS.createBlockData());
+			}
 		}
 	}
 	
