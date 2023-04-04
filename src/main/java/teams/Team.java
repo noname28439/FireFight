@@ -18,7 +18,8 @@ public enum Team {
 	private ChatColor chatColor;
 	private Material button;
 	private Location respawnPoint = null;
-	
+
+	public String selectedBase = "BB0";
 	public ArrayList<String> teamPlayers;
 	
 	

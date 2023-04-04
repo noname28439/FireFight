@@ -3,11 +3,7 @@ package game;
 import java.io.File;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
@@ -33,6 +29,7 @@ import settings.Settings;
 import teams.Team;
 import teams.TeamManager;
 import util.ItemBuilder;
+import util.WorldManager;
 
 public class LobbyState extends GameState{
 
@@ -79,9 +76,11 @@ public class LobbyState extends GameState{
 		joined.setHealth(joined.getMaxHealth());
 		joined.setFoodLevel(20);
 		joined.teleport(Settings.spawn);
-		joined.getInventory().setItem(4, new ItemBuilder(Material.COMPASS, 1).setDisplayname(ChatColor.GOLD+"TeamSelector").build());
-		joined.getInventory().setItem(2, new ItemBuilder(Material.BRICKS, 1).setDisplayname(ChatColor.GOLD+"BaseManager").build());
-		joined.getInventory().setItem(3, new ItemBuilder(Material.GOLDEN_SHOVEL, 1).setDisplayname(ChatColor.GOLD+"BaseSelector").build());
+		//joined.getInventory().setItem(4, new ItemBuilder(Material.COMPASS, 1).setDisplayname(ChatColor.GOLD+"TeamSelector").build());
+		//joined.getInventory().setItem(2, new ItemBuilder(Material.BRICKS, 1).setDisplayname(ChatColor.GOLD+"BaseManager").build());
+		//joined.getInventory().setItem(3, new ItemBuilder(Material.GOLDEN_SHOVEL, 1).setDisplayname(ChatColor.GOLD+"BaseSelector").build());
+
+		joined.getInventory().setItem(4, new ItemBuilder(Material.BOOK, 1).setDisplayname(ChatColor.DARK_AQUA+"Base Selector").build());
 		joined.getInventory().setItem(0, new ItemBuilder(Material.CAMPFIRE, 1).setDisplayname(ChatColor.GOLD+"Spawn").build());
 		if(joined.isOp()) {
 			joined.getInventory().setItem(8, new ItemBuilder(Material.TRIDENT, 1).setDisplayname(ChatColor.GOLD+"TimeSelector").build());
@@ -146,15 +145,32 @@ public class LobbyState extends GameState{
 				p.sendMessage(ChatColor.RED+"Du musst ein Team ausgewählt haben!");
 				return;
 			}else {
-				if(TeamManager.getPlayerTeam(p.getName())==Team.BLUE) {
-					Main.base1worldname = worldname;
-				}else {
-					Main.base2worldname = worldname;
-				}
+				TeamManager.getPlayerTeam(p.getName()).selectedBase = worldname;
 			}
 				p.sendMessage(ChatColor.GREEN+clicked.getItemMeta().getDisplayName()+" erfolgreich als Base für Team "+TeamManager.getPlayerTeam(p.getName()).getTeamName()+" festgelegt!");
 			p.closeInventory();
 			
+		}
+
+		if(title.equalsIgnoreCase(ChatColor.DARK_AQUA+"Base Selection")) {
+			e.setCancelled(true);
+
+			int bbID = Integer.valueOf(clicked.getItemMeta().getLore().get(0));
+
+			if(clicked.getType()==Material.GRAY_DYE){
+				if(TeamManager.getPlayerTeam(p.getName())==null) return;
+				TeamManager.getPlayerTeam(p.getName()).selectedBase = "BB"+bbID;
+				openMGTBaseSelector(p);
+			}else if(clicked.getType()==Material.LIME_DYE){
+				if(TeamManager.getPlayerTeam(p.getName())==null) return;
+
+
+			}else if(clicked.getType()==Material.ENDER_EYE){
+				World toVisit = WorldManager.loadWorld("BB"+bbID);
+				p.setGameMode(GameMode.SPECTATOR);
+				p.teleport(new Location(toVisit, 0, 50, 0));
+			}
+
 		}
 	}
 	
@@ -163,12 +179,32 @@ public class LobbyState extends GameState{
 	public void onItemInteract(PlayerInteractEvent e) {
 		if((e.getAction()==Action.RIGHT_CLICK_AIR || e.getAction()==Action.RIGHT_CLICK_BLOCK) && GameStateManager.currentGameState == Main.LOBBY_STATE && e.getItem()!=null) {
 			if(e.getItem().getType()==Material.CAMPFIRE) { SpawnCMD.tpSpawn(e.getPlayer());}
+			if(e.getItem().getType() == Material.BOOK && e.getItem().getItemMeta().getDisplayName().equals(ChatColor.DARK_AQUA+"Base Selector")) {
+				e.setCancelled(true);
+				openMGTBaseSelector(e.getPlayer());
+			}
 			if(e.getItem().getType() == Material.GOLDEN_SHOVEL) {e.setCancelled(true); openBaseManagerInv(e.getPlayer());}
 			if(e.getItem().getType() == Material.TRIDENT) {e.setCancelled(true); if(e.getPlayer().isOp()) {openTimeManagerInv(e.getPlayer());}}
 		}
 			
 	}
-	
+
+	public static void openMGTBaseSelector(Player toOpen) {
+		Inventory inv = Bukkit.createInventory(null, 18, ChatColor.DARK_AQUA+"Base Selection");
+		for(int i = 0; i<4; i++) {
+			int bbID = i+1;
+			String baseWorldName = "BB"+bbID;
+			inv.setItem(i, new ItemBuilder(Material.ENDER_EYE, 1).setDisplayname("Select").setLore(String.valueOf(bbID)).build());
+
+			Material selectorButtonMaterial = Material.BARRIER;
+			if(TeamManager.getPlayerTeam(toOpen.getName())!=null) selectorButtonMaterial = Material.GRAY_DYE;
+			if(TeamManager.getPlayerTeam(toOpen.getName())!=null && TeamManager.getPlayerTeam(toOpen.getName()).selectedBase.equals(baseWorldName))selectorButtonMaterial = Material.LIME_DYE;
+			inv.setItem(i+9, new ItemBuilder(selectorButtonMaterial, 1).setDisplayname("View").setLore(String.valueOf(bbID)).build());
+
+		}
+
+		toOpen.openInventory(inv);
+	}
 	
 	public static void openBaseManagerInv(Player toOpen) {
 		int rows = 3;

@@ -145,8 +145,8 @@ public class FightState extends GameState{
 		 
 		 */
 		
-		String base1name = Main.base1worldname;
-		String base2name = Main.base2worldname;
+		String base1name = Team.BLUE.selectedBase;
+		String base2name = Team.RED.selectedBase;
 		
 		World base1world = WorldManager.loadWorld(base1name);
 		World base2world = WorldManager.loadWorld(base2name);
